@@ -310,8 +310,67 @@ function reset(){
   document.querySelectorAll("input,textarea").forEach(el=>el.value="");
   document.getElementById("preview").src="";
 }
-<script src="../api-config.js"></script>
-const ENV = "production"; // dev / staging / prod   
+<script src="/api-config.js"></script>
+
+<script>
+const ENV = "production"; // optional
+
+const API_URL = API_CONFIG.BASE_URL;
+const API_KEY = API_CONFIG.API_KEY;
+
+let base64Image = "";
+
+document.getElementById("foto").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(){
+    base64Image = reader.result;
+    document.getElementById("preview").src = base64Image;
+  };
+
+  if(file) reader.readAsDataURL(file);
+});
+
+async function kirim(){
+
+  const data = {
+    kode: v("kode"),
+    role: v("role"),
+    unit: v("unit"),
+    lokasi: v("lokasi"),
+    kategori: v("kategori"),
+    jenis: v("jenis"),
+    tingkat: v("tingkat"),
+    deskripsi: v("deskripsi"),
+    foto: base64Image
+  };
+
+  setStatus("Mengirim...");
+
+  const res = await apiRequest("", "POST", data);
+
+  if(res.status === "success"){
+    setStatus("✅ Terkirim (Status: Diterima)");
+    reset();
+  }else{
+    setStatus("❌ " + res.message);
+  }
+}
+
+function v(id){
+  return document.getElementById(id).value;
+}
+
+function setStatus(t){
+  document.getElementById("status").innerText = t;
+}
+
+function reset(){
+  document.querySelectorAll("input,textarea").forEach(el=>el.value="");
+  document.getElementById("preview").src="";
+}
+</script>   
 
 </body>
 </html>

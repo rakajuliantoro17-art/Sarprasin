@@ -310,7 +310,8 @@ function reset(){
   document.querySelectorAll("input,textarea").forEach(el=>el.value="");
   document.getElementById("preview").src="";
 }
-</script>
+<script src="../api-config.js"></script>
+const ENV = "production"; // dev / staging / prod   
 
 </body>
 </html>

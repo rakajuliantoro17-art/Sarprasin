@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>SARPRAS Mobile</title>
+
+<style>
+:root{
+  --bg1:#5aa9ff;
+  --bg2:#1e3c72;
+  --bg3:#6a5af9;
+
+  --glass:rgba(255,255,255,0.12);
+  --border:rgba(255,255,255,0.25);
+  --text:#ffffff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto;
+}
+
+body{
+  min-height:100vh;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ===== FLOATING BLOBS (IOS STYLE) ===== */
+.blob{
+  position:fixed;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.5;
+  animation: float 12s infinite ease-in-out;
+}
+
+.blob1{ background:#4facfe; top:-100px; left:-100px;}
+.blob2{ background:#6a5af9; bottom:-100px; right:-100px;}
+.blob3{ background:#00f2fe; top:50%; left:60%;}
+
+@keyframes float{
+  0%,100%{ transform:translateY(0);}
+  50%{ transform:translateY(-30px);}
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  max-width:480px;
+  margin:auto;
+  padding:20px;
+  position:relative;
+  z-index:2;
+}
+
+/* ===== HEADER ===== */
+.header{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.title{
+  font-size:22px;
+  font-weight:600;
+}
+
+.subtitle{
+  font-size:13px;
+  opacity:0.7;
+}
+
+/* ===== GLASS CARD ===== */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(25px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* ===== INPUT ===== */
+.group{
+  margin-bottom:12px;
+}
+
+label{
+  font-size:12px;
+  opacity:0.75;
+  margin-bottom:4px;
+  display:block;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,0.18);
+  color:white;
+  font-size:14px;
+  outline:none;
+}
+
+textarea{
+  min-height:80px;
+}
+
+/* ===== BUTTON ===== */
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#4facfe,#6a5af9);
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  margin-top:10px;
+  transition:0.2s;
+}
+
+button:active{
+  transform:scale(0.97);
+}
+
+/* ===== FOTO ===== */
+.preview{
+  width:100%;
+  margin-top:10px;
+  border-radius:14px;
+}
+
+/* ===== STATUS ===== */
+.status{
+  text-align:center;
+  margin-top:10px;
+  font-size:13px;
+}
+
+/* ===== IOS TOUCH EFFECT ===== */
+input:focus,select:focus,textarea:focus{
+  box-shadow:0 0 0 2px rgba(255,255,255,0.3);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="title">SARPRAS</div>
+    <div class="subtitle">Pelaporan Kondisi Sekolah</div>
+  </div>
+
+  <div class="glass">
+
+    <div class="group">
+      <label>Kode Pelapor</label>
+      <input id="kode">
+    </div>
+
+    <div class="group">
+      <label>Peran</label>
+      <select id="role">
+        <option>Wali Kelas</option>
+        <option>Staff Kurikulum</option>
+        <option>Staff Kesiswaan</option>
+        <option>Staff Humas</option>
+        <option>Tata Usaha</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label>Kelas / Unit</label>
+      <input id="unit">
+    </div>
+
+    <div class="group">
+      <label>Lokasi</label>
+      <input id="lokasi" placeholder="X-1 / Lab / Toilet">
+    </div>
+
+    <div class="group">
+      <label>Kategori</label>
+      <select id="kategori">
+        <option>Sarana</option>
+        <option>IT</option>
+        <option>Kebersihan</option>
+        <option>Keamanan</option>
+        <option>Pembelajaran</option>
+        <option>Administrasi</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label>Jenis</label>
+      <select id="jenis">
+        <option>Kerusakan</option>
+        <option>Gangguan</option>
+        <option>Kekurangan</option>
+        <option>Permintaan</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label>Tingkat</label>
+      <select id="tingkat">
+        <option>Normal</option>
+        <option>Butuh Perbaikan</option>
+        <option>Penting</option>
+        <option>Darurat</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label>Deskripsi</label>
+      <textarea id="deskripsi"></textarea>
+    </div>
+
+    <div class="group">
+      <label>Foto</label>
+      <input type="file" accept="image/*" capture="environment" id="foto">
+      <img id="preview" class="preview"/>
+    </div>
+
+    <button onclick="kirim()">Kirim Laporan</button>
+
+    <div class="status" id="status"></div>
+
+  </div>
+
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyn6rNCuC7KgCfmvrphSqYfZ_pZ8q1Hk1gNQT3odSdVemLWeETdqahMI44KCBTi3pU6kg/exec";
+const API_KEY = "SARPRAS123";
+
+let base64Image = "";
+
+document.getElementById("foto").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(){
+    base64Image = reader.result;
+    document.getElementById("preview").src = base64Image;
+  };
+
+  if(file) reader.readAsDataURL(file);
+});
+
+function kirim(){
+
+  const data = {
+    key: API_KEY,
+    kode: v("kode"),
+    role: v("role"),
+    unit: v("unit"),
+    lokasi: v("lokasi"),
+    kategori: v("kategori"),
+    jenis: v("jenis"),
+    tingkat: v("tingkat"),
+    deskripsi: v("deskripsi"),
+    foto: base64Image
+  };
+
+  setStatus("Mengirim...");
+
+  fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status==="success"){
+      setStatus("✅ Terkirim (Status: Diterima)");
+      reset();
+    }else{
+      setStatus("❌ "+res.message);
+    }
+  })
+  .catch(()=>{
+    setStatus("❌ Koneksi gagal");
+  });
+}
+
+function v(id){
+  return document.getElementById(id).value;
+}
+
+function setStatus(t){
+  document.getElementById("status").innerText = t;
+}
+
+function reset(){
+  document.querySelectorAll("input,textarea").forEach(el=>el.value="");
+  document.getElementById("preview").src="";
+}
+</script>
+
+</body>
+</html>

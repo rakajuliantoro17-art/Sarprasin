@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TEST SARPRAS</title>
+</head>
+<body>
+
+<h2>Test Koneksi</h2>
+<button onclick="test()">Test API</button>
+
+<pre id="out"></pre>
+
+<script src="api-config.js"></script>
+
+<script>
+async function test(){
+  const res = await apiRequest("?action=public");
+  document.getElementById("out").innerText = JSON.stringify(res, null, 2);
+}
+</script>
+
+</body>
+</html>

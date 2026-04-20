@@ -647,3 +647,10 @@ const iFoto = headers.indexOf("Foto");
     assets
   };
 }
+function doGet(e) {
+  return handleGet(e);
+}
+
+function doPost(e) {
+  return handlePost(e);
+}

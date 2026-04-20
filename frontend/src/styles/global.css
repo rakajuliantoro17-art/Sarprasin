@@ -1,1 +1,208 @@
+/* ========================================
+   🚀 EJIES GLOBAL STYLE
+======================================== */
 
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(160deg,#8E0E00,#1F1C18,#1e3c72);
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+p {
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+/* =========================
+   GLASS CARD
+========================= */
+.card {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* =========================
+   GRID
+========================= */
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2,1fr);
+}
+
+.grid-auto {
+  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+}
+
+/* =========================
+   BUTTON
+========================= */
+.btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg,#2193b0,#6dd5ed);
+  color: white;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   INPUT
+========================= */
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+/* =========================
+   TABLE
+========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+thead {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+tbody tr {
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* =========================
+   STATUS COLOR
+========================= */
+.status-baik {
+  color: #34c759;
+  font-weight: 600;
+}
+
+.status-perbaikan {
+  color: #ffcc00;
+  font-weight: 600;
+}
+
+.status-rusak {
+  color: #ff3b30;
+  font-weight: 600;
+}
+
+/* =========================
+   PROGRESS BAR
+========================= */
+.progress {
+  width: 100%;
+  height: 26px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  text-align: center;
+  line-height: 26px;
+  font-weight: bold;
+  background: linear-gradient(90deg,#2193b0,#6dd5ed);
+}
+
+/* =========================
+   UTILITIES
+========================= */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+}
+
+/* =========================
+   TV MODE (OPTIONAL)
+========================= */
+@media (min-width: 1600px) {
+
+  body {
+    font-size: 20px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+}

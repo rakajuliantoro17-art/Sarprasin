@@ -1,18 +1,14 @@
-```json
 {
-  "routes": [
-    { "src": "^/$", "dest": "/user/index.html" },
+  "rewrites": [
+    { "source": "/", "destination": "/user/index.html" },
 
-    { "src": "^/user$", "dest": "/user/index.html" },
-    { "src": "^/user/(.*)", "dest": "/user/$1" },
+    { "source": "/user", "destination": "/user/index.html" },
+    { "source": "/user/(.*)", "destination": "/user/$1" },
 
-    { "src": "^/executive$", "dest": "/executive/index.html" },
-    { "src": "^/executive/(.*)", "dest": "/executive/$1" },
+    { "source": "/executive", "destination": "/executive/index.html" },
+    { "source": "/executive/(.*)", "destination": "/executive/$1" },
 
-    { "src": "^/public$", "dest": "/public/index.html" },
-    { "src": "^/public/(.*)", "dest": "/public/$1" }
+    { "source": "/public", "destination": "/public/index.html" },
+    { "source": "/public/(.*)", "destination": "/public/$1" }
   ]
 }
-```
-
-

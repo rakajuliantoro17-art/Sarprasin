@@ -6,6 +6,9 @@
 
 <title>SARPRAS Mobile</title>
 
+<!-- GLOBAL API CONFIG -->
+<script src="/api-config.js"></script>
+
 <style>
 :root{
   --bg1:#5aa9ff;
@@ -31,7 +34,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== FLOATING BLOBS (IOS STYLE) ===== */
+/* ===== FLOATING BLOBS ===== */
 .blob{
   position:fixed;
   width:300px;
@@ -145,11 +148,10 @@ button:active{
   font-size:13px;
 }
 
-/* ===== IOS TOUCH EFFECT ===== */
+/* ===== FOCUS EFFECT ===== */
 input:focus,select:focus,textarea:focus{
   box-shadow:0 0 0 2px rgba(255,255,255,0.3);
 }
-
 </style>
 </head>
 
@@ -246,92 +248,22 @@ input:focus,select:focus,textarea:focus{
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyn6rNCuC7KgCfmvrphSqYfZ_pZ8q1Hk1gNQT3odSdVemLWeETdqahMI44KCBTi3pU6kg/exec";
-const API_KEY = "SARPRAS123";
-
 let base64Image = "";
 
+/* FOTO PREVIEW */
 document.getElementById("foto").addEventListener("change", function(e){
   const file = e.target.files[0];
-  const reader = new FileReader();
+  if(!file) return;
 
+  const reader = new FileReader();
   reader.onload = function(){
     base64Image = reader.result;
     document.getElementById("preview").src = base64Image;
   };
-
-  if(file) reader.readAsDataURL(file);
+  reader.readAsDataURL(file);
 });
 
-function kirim(){
-
-  const data = {
-    key: API_KEY,
-    kode: v("kode"),
-    role: v("role"),
-    unit: v("unit"),
-    lokasi: v("lokasi"),
-    kategori: v("kategori"),
-    jenis: v("jenis"),
-    tingkat: v("tingkat"),
-    deskripsi: v("deskripsi"),
-    foto: base64Image
-  };
-
-  setStatus("Mengirim...");
-
-  fetch(API_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  })
-  .then(r=>r.json())
-  .then(res=>{
-    if(res.status==="success"){
-      setStatus("✅ Terkirim (Status: Diterima)");
-      reset();
-    }else{
-      setStatus("❌ "+res.message);
-    }
-  })
-  .catch(()=>{
-    setStatus("❌ Koneksi gagal");
-  });
-}
-
-function v(id){
-  return document.getElementById(id).value;
-}
-
-function setStatus(t){
-  document.getElementById("status").innerText = t;
-}
-
-function reset(){
-  document.querySelectorAll("input,textarea").forEach(el=>el.value="");
-  document.getElementById("preview").src="";
-}
-<script src="/api-config.js"></script>
-
-<script>
-const ENV = "production"; // optional
-
-const API_URL = API_CONFIG.BASE_URL;
-const API_KEY = API_CONFIG.API_KEY;
-
-let base64Image = "";
-
-document.getElementById("foto").addEventListener("change", function(e){
-  const file = e.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = function(){
-    base64Image = reader.result;
-    document.getElementById("preview").src = base64Image;
-  };
-
-  if(file) reader.readAsDataURL(file);
-});
-
+/* KIRIM */
 async function kirim(){
 
   const data = {
@@ -358,19 +290,20 @@ async function kirim(){
   }
 }
 
+/* UTIL */
 function v(id){
   return document.getElementById(id).value;
 }
 
-function setStatus(t){
-  document.getElementById("status").innerText = t;
+function setStatus(text){
+  document.getElementById("status").innerText = text;
 }
 
 function reset(){
-  document.querySelectorAll("input,textarea").forEach(el=>el.value="");
+  document.querySelectorAll("input, textarea").forEach(el=>el.value="");
   document.getElementById("preview").src="";
 }
-</script>   
+</script>
 
 </body>
 </html>

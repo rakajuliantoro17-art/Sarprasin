@@ -91,3 +91,21 @@ function getSarprasData() {
     return obj;
   });
 }
+// CREATE
+if (payload.action === "create") {
+  return jsonOutput(simpanData(payload));
+}
+
+// UPDATE
+if (payload.action === "update") {
+  return jsonOutput({
+    message: updateData(payload)
+  });
+}
+
+// DELETE
+if (payload.action === "delete") {
+  return jsonOutput({
+    message: deleteData(payload.id)
+  });
+}

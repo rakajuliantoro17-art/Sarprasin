@@ -1,1 +1,12 @@
-
+{
+  "routes": [
+    {
+      "src": "/public-dashboard/(.*)",
+      "dest": "/public-dashboard/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

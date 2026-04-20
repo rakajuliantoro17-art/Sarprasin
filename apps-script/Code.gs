@@ -654,3 +654,7 @@ function doGet(e) {
 function doPost(e) {
   return handlePost(e);
 }
+const sheet = getSheet(
+  CONFIG.SHEETS.DATA_ASET,
+  CONFIG.HEADERS.DATA_ASET
+);

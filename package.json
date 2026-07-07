@@ -1,1 +1,53 @@
-
+{
+  "name": "sarprasin-v2",
+  "version": "2.0.0",
+  "description": "Smart School Asset Management System for SMAN 1 Sooko Mojokerto",
+  "private": true,
+  "type": "module",
+  "author": {
+    "name": "SMAN 1 Sooko Mojokerto",
+    "email": "",
+    "url": "https://sman1sooko.sch.id"
+  },
+  "license": "MIT",
+  "homepage": "https://sarprasin.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USERNAME/sarprasin-v2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/USERNAME/sarprasin-v2/issues"
+  },
+  "keywords": [
+    "inventory",
+    "asset-management",
+    "school",
+    "firebase",
+    "vercel",
+    "sarpras",
+    "sman1sooko"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "vercel --prod",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "firebase": "^12.0.0",
+    "chart.js": "^4.5.0",
+    "html5-qrcode": "^2.3.8",
+    "jspdf": "^3.0.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.6.0"
+  }
+}

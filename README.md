@@ -1,213 +1,130 @@
-# 🏫 SARPRAS SYSTEM – SMAN 1 SOOKO
+# Sarprasin v2.0
 
-Sistem digital pemetaan kondisi sarana dan prasarana sekolah berbasis **transparansi, partisipasi, dan data real-time**.
+## Smart School Asset Management System
 
-Dikembangkan untuk mendukung konsep **Sekolah 6.0** dengan pendekatan:
+Sarprasin adalah platform manajemen aset sekolah berbasis web yang dikembangkan untuk mendukung digitalisasi Sarana dan Prasarana di SMAN 1 Sooko Mojokerto.
 
-* 📊 Data-driven decision making
-* 👥 Partisipasi seluruh warga sekolah
-* 🔍 Transparansi kondisi sarpras secara terbuka
+## Tujuan
 
----
-
-## 🚀 ARSITEKTUR SISTEM
-
-Sistem ini menggunakan pendekatan **low-cost high-impact** dengan memanfaatkan layanan cloud:
-
-* **Frontend**: Vercel
-* **Backend API**: Google Apps Script
-* **Database**: Google Sheets
-* **File Storage**: Google Drive
-* **Mobile App**: MIT App Inventor (WebView)
+- Digitalisasi inventaris aset sekolah
+- Monitoring kondisi aset secara real-time
+- Transparansi data inventaris
+- Audit aset berbasis QR Code
+- Dashboard Executive
+- Dashboard Publik
+- Sinkronisasi otomatis ke Google Spreadsheet
 
 ---
 
-## 🧩 STRUKTUR SISTEM
+## Teknologi
 
-```
-/
-├── api-config.js
-├── vercel.json
-├── user/
-│   └── index.html
-├── executive/
-│   └── index.html (coming soon)
-└── public/
-    └── index.html (coming soon)
-```
+### Frontend
+- HTML5
+- CSS3
+- JavaScript ES6
 
----
+### Backend
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Storage
 
-## 🧑‍💻 FITUR UTAMA
+### Integrasi
+- Google Apps Script
+- Google Spreadsheet
 
-### 1. 📱 Dashboard User (Pelaporan)
-
-Digunakan oleh:
-
-* Wali Kelas
-* Staff Kurikulum
-* Staff Kesiswaan
-* Staff Humas
-* Tata Usaha
-
-**Fitur:**
-
-* Input laporan kondisi sarpras
-* Upload foto (kamera langsung)
-* Kategori & klasifikasi kerusakan
-* Validasi user berbasis kode
-* Status laporan (Diterima)
+### Deployment
+- Vercel
 
 ---
 
-### 2. 🧠 Dashboard Executive (Manajemen)
+## Struktur Sistem
 
-Digunakan oleh:
+Public Dashboard
 
-* Kepala Sekolah
-* Wakasek Sarpras
+↓
 
-**Fitur:**
+Authentication
 
-* Monitoring real-time kondisi sekolah
-* KPI kerusakan (Normal, Perbaikan, Penting, Darurat)
-* Data detail laporan
-* Update status laporan
+↓
 
----
+Role Based Access
 
-### 3. 🌍 Dashboard Publik
+↓
 
-Ditampilkan di website sekolah
+Admin
 
-**Fitur:**
+Executive
 
-* Ringkasan kondisi sarpras
-* Indeks kelayakan sekolah
-* Transparansi data ke publik
+User
 
----
+↓
 
-## 🔐 KEAMANAN SISTEM
+Firestore
 
-* API dilindungi dengan **API KEY**
-* User tervalidasi melalui spreadsheet
-* Tidak ada akses langsung ke database
-* Drive tidak publik (hanya file laporan)
+↓
+
+Spreadsheet Sync
 
 ---
 
-## 📊 STRUKTUR DATA (SPREADSHEET)
+## Role
 
-### Sheet: `Users`
+### Admin
 
-| Kode | Nama | Role | Unit | Aktif |
-| ---- | ---- | ---- | ---- | ----- |
+- CRUD Master Data
+- CRUD Inventaris
+- Manajemen User
+- Sinkronisasi
+- Backup
 
----
+### Executive
 
-### Sheet: `Laporan`
+- Dashboard Monitoring
+- Statistik
+- Grafik
+- Laporan
 
-| ID | Timestamp | Kode | Nama | Role | Unit | Lokasi | Kategori | Jenis | Tingkat | Deskripsi | Foto | Status |
-| -- | --------- | ---- | ---- | ---- | ---- | ------ | -------- | ----- | ------- | --------- | ---- | ------ |
+### User
 
----
+- Input Inventaris
+- Audit
+- Scan QR
+- Update Kondisi
 
-## 🔁 FLOW SISTEM
+### Public
 
-1. User input laporan dari aplikasi
-2. Data dikirim ke Apps Script API
-3. Validasi user & input
-4. Upload foto ke Drive
-5. Simpan ke Spreadsheet
-6. Dashboard membaca data secara real-time
-
----
-
-## ⚙️ API ENDPOINT
-
-### 🔹 Submit Laporan
-
-```
-POST /
-```
-
-### 🔹 Executive Dashboard
-
-```
-GET /?action=executive
-```
-
-### 🔹 Public Dashboard
-
-```
-GET /?action=public
-```
+- Dashboard Transparansi
+- Statistik Aset
+- Indeks Kelayakan
 
 ---
 
-## 🛠 DEPLOYMENT
+## Struktur Database
 
-### 1. Backend (Apps Script)
+Firestore
 
-* Deploy sebagai **Web App**
-* Akses: `Anyone with link`
+users
 
----
+master
 
-### 2. Frontend (Vercel)
+aset
 
-* Connect ke GitHub
-* Pastikan struktur folder benar
-* Gunakan `vercel.json` untuk routing
+histori
 
----
+logAktivitas
 
-## ❗ TROUBLESHOOTING
+dashboardCache
 
-### 404 di `/user`
-
-* Pastikan folder: `/user/index.html`
-* Tambahkan `vercel.json`
+settings
 
 ---
 
-### API tidak jalan
+## Status
 
-* Cek `api-config.js`
-* Pastikan URL Apps Script benar
+Version : 2.0
 
----
+Status : Development
 
-### Upload foto gagal
+Developer :
 
-* Cek permission Google Drive
-* Pastikan format base64 valid
-
----
-
-## 🎯 ROADMAP
-
-* [ ] Dashboard Executive (visual analytics)
-* [ ] Dashboard Publik (embed website)
-* [ ] Notifikasi laporan
-* [ ] Sistem prioritas perbaikan otomatis
-* [ ] Integrasi QR Code ruangan
-
----
-
-## 👨‍🏫 PENGEMBANG
-
-Sistem ini dikembangkan untuk mendukung digitalisasi sarana dan prasarana di:
-
-**SMAN 1 Sooko**
-
----
-
-## 📌 LISENSI
-
-Digunakan untuk kebutuhan internal sekolah dan pengembangan sistem pendidikan berbasis digital.
-
----
-
-**SARPRAS SYSTEM © 2026**
+SMAN 1 Sooko Mojokerto

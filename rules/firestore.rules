@@ -1,1 +1,115 @@
+rules_version = '2';
 
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ======================================================
+    // FUNCTIONS
+    // ======================================================
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() &&
+             request.auth.token.level == "admin";
+    }
+
+    function isExecutive() {
+      return signedIn() &&
+             request.auth.token.level == "executive";
+    }
+
+    function isUser() {
+      return signedIn() &&
+             request.auth.token.level == "user";
+    }
+
+    // ======================================================
+    // USERS
+    // ======================================================
+
+    match /users/{userId} {
+
+      allow read: if signedIn();
+
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ======================================================
+    // MASTER DATA
+    // ======================================================
+
+    match /master/{collection}/{document} {
+
+      allow read: if signedIn();
+
+      allow write: if isAdmin();
+    }
+
+    // ======================================================
+    // ASET
+    // ======================================================
+
+    match /aset/{assetId} {
+
+      allow read: if signedIn();
+
+      allow create: if isAdmin() || isUser();
+
+      allow update: if isAdmin() || isUser();
+
+      allow delete: if isAdmin();
+    }
+
+    // ======================================================
+    // HISTORI
+    // ======================================================
+
+    match /histori/{historyId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn();
+
+      allow update, delete: if isAdmin();
+    }
+
+    // ======================================================
+    // LOG AKTIVITAS
+    // ======================================================
+
+    match /logAktivitas/{logId} {
+
+      allow read: if isAdmin() || isExecutive();
+
+      allow create: if signedIn();
+
+      allow update, delete: if false;
+    }
+
+    // ======================================================
+    // DASHBOARD CACHE
+    // ======================================================
+
+    match /dashboardCache/{document} {
+
+      allow read: if true;
+
+      allow write: if isAdmin();
+    }
+
+    // ======================================================
+    // SETTINGS
+    // ======================================================
+
+    match /settings/{document} {
+
+      allow read: if signedIn();
+
+      allow write: if isAdmin();
+    }
+
+  }
+}

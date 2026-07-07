@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "sarprasin-dev",
+    "production": "sarprasin-prod"
+  }
+}

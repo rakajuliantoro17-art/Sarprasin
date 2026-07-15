@@ -1,6 +1,8 @@
 {
   "projects": {
-    "default": "sarprasin-dev",
+    "default": "sarprasin-2",
+    "development": "sarprasin-dev",
+    "staging": "sarprasin-staging",
     "production": "sarprasin-prod"
   }
 }

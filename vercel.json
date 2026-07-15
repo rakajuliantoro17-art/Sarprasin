@@ -1,77 +1,91 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
 
   "cleanUrls": true,
+
   "trailingSlash": false,
 
   "rewrites": [
     {
       "source": "/",
-      "destination": "/public/index.html"
+      "destination": "/index.html"
     },
-
+    {
+      "source": "/dashboard",
+      "destination": "/pages/dashboard/index.html"
+    },
     {
       "source": "/login",
-      "destination": "/login/index.html"
+      "destination": "/pages/login/index.html"
     },
-
     {
-      "source": "/admin",
-      "destination": "/admin/index.html"
+      "source": "/profile",
+      "destination": "/pages/profile/index.html"
     },
-
+    {
+      "source": "/settings",
+      "destination": "/pages/settings/index.html"
+    },
+    {
+      "source": "/asset",
+      "destination": "/pages/asset/index.html"
+    },
+    {
+      "source": "/report",
+      "destination": "/pages/report/index.html"
+    },
     {
       "source": "/executive",
-      "destination": "/executive/index.html"
+      "destination": "/pages/executive/index.html"
     },
-
     {
-      "source": "/user",
-      "destination": "/user/index.html"
-    },
-
-    {
-      "source": "/public",
-      "destination": "/public/index.html"
-    },
-
-    {
-      "source": "/assets/(.*)",
-      "destination": "/assets/$1"
-    },
-
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/maintenance",
+      "destination": "/pages/maintenance/index.html"
     }
   ],
 
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/fonts/(.*)\\.woff2",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/assets/css/(.*)",
       "headers": [
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/assets/js/(.*)",
+      "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/assets/img/(.*)",
+      "headers": [
         {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
         }
       ]
     }
-  ]
+  ],
+
+  "build": {
+    "env": {
+      "APP_NAME": "SMANSASOO Digital System"
+    }
+  }
 }

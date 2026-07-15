@@ -1,1 +1,505 @@
+/*
+==========================================================
+BODY LAYOUT STYLE
+SMANSASOO Digital System
+Version : 1.0.0
+==========================================================
+*/
 
+
+/* ======================================================
+   ROOT VARIABLE
+====================================================== */
+
+:root {
+
+    --primary-color:#2563eb;
+
+    --secondary-color:#0f172a;
+
+    --text-color:#ffffff;
+
+    --muted-text:
+    rgba(255,255,255,.7);
+
+
+    --bg-overlay:
+    rgba(15,23,42,.45);
+
+
+}
+
+
+
+/* ======================================================
+   GLOBAL BODY
+====================================================== */
+
+
+body {
+
+
+    margin:0;
+
+
+    min-height:100vh;
+
+
+    font-family:
+
+    "Inter",
+    "Poppins",
+    "Segoe UI",
+    sans-serif;
+
+
+
+    color:var(--text-color);
+
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        rgba(15,23,42,.75),
+        rgba(30,64,175,.55)
+    ),
+
+
+    url("/assets/img/bg.jpg");
+
+
+
+    background-size:cover;
+
+
+    background-position:center;
+
+
+    background-attachment:fixed;
+
+
+
+    overflow-x:hidden;
+
+
+
+}
+
+
+
+/* ======================================================
+   MAIN APP WRAPPER
+====================================================== */
+
+
+.app {
+
+
+    min-height:100vh;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+}
+
+
+
+/* ======================================================
+   CONTENT AREA
+====================================================== */
+
+
+.main-content {
+
+
+    flex:1;
+
+
+    padding-top:90px;
+
+
+    padding-left:30px;
+
+
+    padding-right:30px;
+
+
+    padding-bottom:30px;
+
+
+
+}
+
+
+
+/* ======================================================
+   PAGE CONTAINER
+====================================================== */
+
+
+.container {
+
+
+    width:100%;
+
+
+    max-width:1400px;
+
+
+    margin:auto;
+
+
+}
+
+
+
+/* ======================================================
+   GLASS SECTION
+====================================================== */
+
+
+.glass {
+
+
+    background:
+
+    rgba(255,255,255,.12);
+
+
+
+    backdrop-filter:
+
+    blur(16px);
+
+
+
+    -webkit-backdrop-filter:
+
+    blur(16px);
+
+
+
+    border:
+
+    1px solid rgba(255,255,255,.2);
+
+
+
+    border-radius:20px;
+
+
+
+    box-shadow:
+
+    0 20px 40px rgba(0,0,0,.18);
+
+
+
+}
+
+
+
+/* ======================================================
+   PAGE TITLE
+====================================================== */
+
+
+.page-title {
+
+
+    font-size:
+
+    1.8rem;
+
+
+    font-weight:700;
+
+
+    margin-bottom:20px;
+
+
+
+}
+
+
+
+.page-subtitle {
+
+
+    color:
+
+    var(--muted-text);
+
+
+
+    font-size:.95rem;
+
+
+}
+
+
+
+/* ======================================================
+   SECTION SPACING
+====================================================== */
+
+
+.section {
+
+
+    margin-bottom:30px;
+
+
+}
+
+
+
+/* ======================================================
+   SCROLLBAR
+====================================================== */
+
+
+::-webkit-scrollbar {
+
+
+    width:8px;
+
+
+}
+
+
+
+::-webkit-scrollbar-track {
+
+
+    background:
+
+    rgba(255,255,255,.05);
+
+
+}
+
+
+
+::-webkit-scrollbar-thumb {
+
+
+    background:
+
+    rgba(255,255,255,.35);
+
+
+
+    border-radius:20px;
+
+
+}
+
+
+
+::-webkit-scrollbar-thumb:hover {
+
+
+    background:
+
+    rgba(255,255,255,.55);
+
+
+}
+
+
+
+/* ======================================================
+   TEXT SELECTION
+====================================================== */
+
+
+::selection {
+
+
+    background:
+
+    rgba(59,130,246,.5);
+
+
+
+    color:white;
+
+
+}
+
+
+
+/* ======================================================
+   LINK DEFAULT
+====================================================== */
+
+
+a {
+
+
+    color:inherit;
+
+
+}
+
+
+
+/* ======================================================
+   IMAGE DEFAULT
+====================================================== */
+
+
+img {
+
+
+    max-width:100%;
+
+
+    display:block;
+
+
+}
+
+
+
+/* ======================================================
+   DASHBOARD MODE
+====================================================== */
+
+
+.dashboard-layout {
+
+
+    display:flex;
+
+
+    min-height:100vh;
+
+
+}
+
+
+
+/* CONTENT BESIDE SIDEBAR */
+
+.dashboard-content {
+
+
+    flex:1;
+
+
+    margin-left:260px;
+
+
+    padding:90px 30px 30px;
+
+
+
+}
+
+
+
+/* ======================================================
+   AUTH / LANDING PAGE
+====================================================== */
+
+
+.center-layout {
+
+
+    min-height:100vh;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    padding:30px;
+
+
+}
+
+
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+
+@media(max-width:1024px){
+
+
+.main-content {
+
+
+    padding-left:20px;
+
+
+    padding-right:20px;
+
+
+}
+
+
+
+.dashboard-content {
+
+
+    margin-left:0;
+
+
+}
+
+
+}
+
+
+
+@media(max-width:768px){
+
+
+body {
+
+
+    background-attachment:
+
+    scroll;
+
+
+}
+
+
+
+.main-content {
+
+
+    padding-top:80px;
+
+
+}
+
+
+
+.page-title {
+
+
+    font-size:1.5rem;
+
+
+}
+
+
+
+}

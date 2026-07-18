@@ -11,36 +11,8 @@
       "destination": "/index.html"
     },
     {
-      "source": "/dashboard",
-      "destination": "/pages/dashboard/index.html"
-    },
-    {
       "source": "/login",
-      "destination": "/pages/login/index.html"
-    },
-    {
-      "source": "/profile",
-      "destination": "/pages/profile/index.html"
-    },
-    {
-      "source": "/settings",
-      "destination": "/pages/settings/index.html"
-    },
-    {
-      "source": "/asset",
-      "destination": "/pages/asset/index.html"
-    },
-    {
-      "source": "/report",
-      "destination": "/pages/report/index.html"
-    },
-    {
-      "source": "/executive",
-      "destination": "/pages/executive/index.html"
-    },
-    {
-      "source": "/maintenance",
-      "destination": "/pages/maintenance/index.html"
+      "destination": "/src/pages/login/index.html"
     }
   ],
 

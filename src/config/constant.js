@@ -79,8 +79,14 @@ export const USER_ROLE = {
     STAFF:
     "staff",
 
+    ARSIPARIS:
+    "arsiparis",
+
     GURU:
     "guru",
+
+    WALI_KELAS:
+    "wali_kelas",
 
     VIEWER:
     "viewer"

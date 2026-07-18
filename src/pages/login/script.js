@@ -15,7 +15,7 @@ auth
 
 }
 
-from "../../services/firebase.js";
+from "../../services/firebase/index.js";
 
 
 

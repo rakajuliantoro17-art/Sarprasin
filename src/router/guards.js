@@ -1,62 +1,38 @@
 /*
 ==================================================
-AUTH GUARD
+GLOBAL ROUTE GUARDS
 
 ==================================================
 */
 
 
-import {
-
-auth
-
-}
-
-from "../config/firebase.js";
+export const guards = {
 
 
+beforeEnter(){
 
-import {
 
-onAuthStateChanged
+console.log(
+"Checking route..."
+);
 
-}
 
-from "firebase/auth";
+},
 
 
 
 
 
-
-export function checkAuth(){
-
+afterEnter(){
 
 
-return new Promise(
-
-resolve=>{
-
-
-onAuthStateChanged(
-
-auth,
-
-user=>{
-
-
-resolve(user);
-
-
-}
-
+console.log(
+"Route loaded"
 );
 
 
 }
 
-);
 
 
-
-}
+};

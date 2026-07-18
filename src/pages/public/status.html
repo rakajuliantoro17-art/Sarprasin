@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
 
-
 <head>
 
-
 <meta charset="UTF-8">
-
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 <title>
-
 SARPRASIN - System Status
-
 </title>
 
 
-
 <link rel="icon" href="/assets/logo/logo.png">
-
 
 
 <link rel="stylesheet" href="/assets/css/main.css">
@@ -30,61 +23,48 @@ SARPRASIN - System Status
 <link rel="stylesheet" href="/assets/css/pages/status.css">
 
 
-
 </head>
 
 
-
-
 <body>
-
 
 
 <div class="status-wrapper">
 
 
 
-
-
-
-
-<!-- ===========================
+<!-- ==================================
      HEADER
-=========================== -->
+================================== -->
 
 
 <header class="status-header">
 
 
-<img
+<div class="brand">
 
+<img 
 src="/assets/logo/logo.png"
-
 alt="SARPRASIN"
-
-
 >
 
 
 <div>
 
-
 <h1>
-
 SARPRASIN
-
 </h1>
 
 
 <p>
-
 System Status Center
-
 </p>
 
 
 </div>
 
+
+</div>
 
 
 </header>
@@ -97,31 +77,26 @@ System Status Center
 
 
 
-<!-- ===========================
-     MAIN STATUS
-=========================== -->
+<!-- ==================================
+     GLOBAL STATUS
+================================== -->
 
 
-<section class="status-main">
+<section class="global-status">
 
 
-
-
-
-<div class="status-icon" id="statusIcon">
-
+<div 
+id="globalIcon"
+class="status-icon"
+>
 
 🟢
-
 
 </div>
 
 
 
-
-
-
-<h2 id="systemStatus">
+<h2 id="globalTitle">
 
 All Systems Operational
 
@@ -129,30 +104,22 @@ All Systems Operational
 
 
 
+<p id="globalMessage">
 
-
-<p id="statusDescription">
-
-
-Seluruh layanan SARPRASIN berjalan normal.
-
+Seluruh layanan berjalan normal.
 
 </p>
 
 
 
+<div class="update-time">
 
 
-<div class="last-update">
+Last Update :
 
-
-Update terakhir:
-
-<strong id="lastUpdate">
-
+<span id="updatedAt">
 -
-
-</strong>
+</span>
 
 
 </div>
@@ -169,52 +136,121 @@ Update terakhir:
 
 
 
-<!-- ===========================
-     SERVICES
-=========================== -->
+<!-- ==================================
+     SERVICE MONITOR
+================================== -->
 
 
-<section class="service-list">
-
-
-
+<section class="services">
 
 
 <h3>
 
-Status Layanan
+Service Availability
+
+</h3>
+
+
+
+<div 
+id="serviceContainer"
+class="service-container"
+>
+
+
+
+<!-- Generated Javascript -->
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ==================================
+     INCIDENT HISTORY
+================================== -->
+
+
+<section class="incident">
+
+
+<h3>
+
+Incident History
 
 </h3>
 
 
 
 
+<div 
+id="incidentContainer"
+>
 
 
+<div class="empty">
 
+✅ Tidak ada gangguan aktif
 
-
-<div class="service-card">
-
-
-<div>
-
-
-<span class="indicator online"></span>
-
-
-Authentication
+</div>
 
 
 </div>
 
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ==================================
+     SYSTEM INFORMATION
+================================== -->
+
+
+<section class="system-info">
+
+
+<h3>
+
+System Information
+
+</h3>
+
+
+
+<div class="info-grid">
+
+
+
+<div>
 
 <strong>
 
-Operational
+Application
 
 </strong>
 
+<span>
+
+SARPRASIN v2.0
+
+</span>
 
 </div>
 
@@ -222,102 +258,65 @@ Operational
 
 
 
+<div>
+
+<strong>
+
+Environment
+
+</strong>
+
+<span>
+
+Production
+
+</span>
+
+</div>
 
 
 
-
-<div class="service-card">
 
 
 <div>
 
-
-<span class="indicator online"></span>
-
+<strong>
 
 Database
 
-
-</div>
-
-
-<strong>
-
-Operational
-
 </strong>
 
+<span>
+
+Firebase Cloud
+
+</span>
 
 </div>
 
 
 
-
-
-
-
-
-
-<div class="service-card">
 
 
 <div>
 
-
-<span class="indicator online"></span>
-
-
-Asset Management
-
-
-</div>
-
-
 <strong>
 
-Operational
+Hosting
 
 </strong>
 
+<span>
+
+Vercel
+
+</span>
 
 </div>
 
 
 
-
-
-
-
-
-
-<div class="service-card">
-
-
-<div>
-
-
-<span class="indicator online"></span>
-
-
-QR Scanner
-
-
 </div>
-
-
-<strong>
-
-Operational
-
-</strong>
-
-
-</div>
-
-
-
-
-
 
 
 </section>
@@ -330,49 +329,9 @@ Operational
 
 
 
-<!-- ===========================
-     INCIDENT
-=========================== -->
-
-
-<section class="incident-section">
-
-
-
-<h3>
-
-Riwayat Gangguan
-
-</h3>
-
-
-
-
-<div class="incident-empty">
-
-
-✅
-
-Tidak ada gangguan tercatat.
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- ===========================
-     LINKS
-=========================== -->
+<!-- ==================================
+     ACTION
+================================== -->
 
 
 <section class="status-action">
@@ -391,7 +350,6 @@ Tidak ada gangguan tercatat.
 📞 Contact Admin
 
 </a>
-
 
 
 </section>
@@ -416,16 +374,12 @@ Tidak ada gangguan tercatat.
 
 <p>
 
-SARPRASIN Digital System
+Smart School Asset Management System
 
 </p>
 
 
 </footer>
-
-
-
-
 
 
 
@@ -437,17 +391,13 @@ SARPRASIN Digital System
 
 
 
-<script
-
+<script 
 type="module"
-
 src="/src/pages/public/status.js"
-
 ></script>
 
 
 
 </body>
-
 
 </html>

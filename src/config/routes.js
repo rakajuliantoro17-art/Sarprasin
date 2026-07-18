@@ -4,7 +4,7 @@ SARPRASIN v2.0
 SMANSASOO Digital System
 
 Application Routes Configuration
-Version : 1.0.0
+Version : 1.1.0
 ==========================================================
 */
 
@@ -18,345 +18,103 @@ from "./constant.js";
 
 
 // ======================================================
-// PUBLIC ROUTES
+// PUBLIC ROUTES (tanpa login)
 // ======================================================
 
 export const PUBLIC_ROUTES = [
 
-
     {
-
-        name:
-        "Login",
-
-        path:
-        "/login",
-
-        page:
-        "login",
-
-        title:
-        "Login - SARPRASIN",
-
-        auth:
-        false
-
+        name: "Login",
+        path: "/login",
+        page: "login",
+        title: "Login - SARPRASIN",
+        auth: false
     },
 
-
     {
-
-        name:
-        "Home",
-
-        path:
-        "/",
-
-        page:
-        "home",
-
-        title:
-        "SARPRASIN v2.0",
-
-        auth:
-        false
-
+        name: "Publik",
+        path: "/public",
+        page: "public",
+        title: "SARPRASIN - Ringkasan Publik",
+        auth: false
     }
-
 
 ];
 
 
 
 
-
 // ======================================================
-// MAIN APPLICATION ROUTES
+// DASHBOARD ROUTES (butuh login, dibatasi role)
 // ======================================================
 
 export const APP_ROUTES = [
 
-
     {
-
-        name:
-        "Dashboard",
-
-        path:
-        "/dashboard",
-
-        page:
-        "dashboard",
-
-        title:
-        "Dashboard",
-
-        icon:
-        "layout-dashboard",
-
-        auth:
-        true,
-
-        roles:
-        [
-
+        name: "Dashboard Admin",
+        path: "/admin",
+        page: "admin",
+        title: "Dashboard Admin",
+        icon: "layout-dashboard",
+        auth: true,
+        roles: [
             USER_ROLE.ADMIN,
-
             USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.OPERATOR,
-
-            USER_ROLE.STAFF
-
-        ]
-
-    },
-
-
-
-    {
-
-        name:
-        "Asset",
-
-        path:
-        "/asset",
-
-        page:
-        "asset",
-
-        title:
-        "Asset Management",
-
-        icon:
-        "package",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.OPERATOR,
-
-            USER_ROLE.STAFF
-
-        ]
-
-    },
-
-
-
-    {
-
-        name:
-        "Room",
-
-        path:
-        "/room",
-
-        page:
-        "room",
-
-        title:
-        "Room Management",
-
-        icon:
-        "building",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.OPERATOR
-
-        ]
-
-    },
-
-
-
-    {
-
-        name:
-        "Maintenance",
-
-        path:
-        "/maintenance",
-
-        page:
-        "maintenance",
-
-        title:
-        "Maintenance",
-
-        icon:
-        "wrench",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.STAFF
-
-        ]
-
-    },
-
-
-
-    {
-
-        name:
-        "Report",
-
-        path:
-        "/report",
-
-        page:
-        "report",
-
-        title:
-        "Report",
-
-        icon:
-        "file-text",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.OPERATOR
-
-        ]
-
-    },
-
-
-    {
-
-        name:
-        "Executive",
-
-        path:
-        "/executive",
-
-        page:
-        "executive",
-
-        title:
-        "Executive Dashboard",
-
-        icon:
-        "chart-no-axes-combined",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS
-
-        ]
-
-    },
-
-
-    {
-
-        name:
-        "Profile",
-
-        path:
-        "/profile",
-
-        page:
-        "profile",
-
-        title:
-        "User Profile",
-
-        icon:
-        "user",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN,
-
-            USER_ROLE.WAKA_SARPRAS,
-
-            USER_ROLE.OPERATOR,
-
             USER_ROLE.STAFF,
-
-            USER_ROLE.GURU
-
+            USER_ROLE.ARSIPARIS
         ]
-
     },
 
+    {
+        name: "Dashboard Eksekutif",
+        path: "/executive",
+        page: "executive",
+        title: "Dashboard Eksekutif",
+        icon: "chart-no-axes-combined",
+        auth: true,
+        roles: [
+            USER_ROLE.ADMIN,
+            USER_ROLE.WAKA_SARPRAS
+        ]
+    },
 
     {
-
-        name:
-        "Settings",
-
-        path:
-        "/settings",
-
-        page:
-        "settings",
-
-        title:
-        "System Settings",
-
-        icon:
-        "settings",
-
-        auth:
-        true,
-
-        roles:
-        [
-
-            USER_ROLE.ADMIN
-
+        name: "Dashboard User",
+        path: "/user",
+        page: "user",
+        title: "Dashboard User",
+        icon: "user",
+        auth: true,
+        roles: [
+            USER_ROLE.OPERATOR,
+            USER_ROLE.STAFF,
+            USER_ROLE.GURU,
+            USER_ROLE.WALI_KELAS,
+            USER_ROLE.VIEWER
         ]
-
     }
-
 
 ];
 
+
+
+
+// ======================================================
+// SUB-HALAMAN ADMIN (rencana ke depan, belum ada file-nya)
+// Nanti ini jadi bagian/tab di dalam Dashboard Admin,
+// bukan dashboard terpisah -- makanya belum masuk
+// APP_ROUTES di atas.
+// ======================================================
+
+export const ADMIN_SECTIONS = [
+
+    { name: "Asset", page: "asset", icon: "package" },
+    { name: "Room", page: "room", icon: "building" },
+    { name: "Maintenance", page: "maintenance", icon: "wrench" },
+    { name: "Report", page: "report", icon: "file-text" },
+    { name: "Settings", page: "settings", icon: "settings" }
+
+];
 
 
 
@@ -367,44 +125,21 @@ export const APP_ROUTES = [
 
 export const ERROR_ROUTES = [
 
-
     {
-
-        name:
-        "Not Found",
-
-        path:
-        "*",
-
-        page:
-        "404",
-
-        title:
-        "Page Not Found"
-
-
+        name: "Not Found",
+        path: "*",
+        page: "404",
+        title: "Page Not Found"
     },
 
-
     {
-
-        name:
-        "Maintenance",
-
-        path:
-        "/system-maintenance",
-
-        page:
-        "maintenance",
-
-        title:
-        "System Maintenance"
-
+        name: "Maintenance",
+        path: "/system-maintenance",
+        page: "maintenance",
+        title: "System Maintenance"
     }
 
-
 ];
-
 
 
 
@@ -413,85 +148,45 @@ export const ERROR_ROUTES = [
 // ROUTE HELPERS
 // ======================================================
 
-
-export function getRouteByPath(path){
-
+export function getRouteByPath(path) {
 
     return [
-
         ...PUBLIC_ROUTES,
-
         ...APP_ROUTES,
-
         ...ERROR_ROUTES
-
     ]
-
-    .find(
-
-        route =>
-        route.path === path
-
-    );
-
+    .find(route => route.path === path);
 
 }
 
 
-
-
-export function getRouteByName(name){
-
+export function getRouteByName(name) {
 
     return [
-
         ...PUBLIC_ROUTES,
-
         ...APP_ROUTES,
-
         ...ERROR_ROUTES
-
     ]
-
-    .find(
-
-        route =>
-        route.name === name
-
-    );
-
+    .find(route => route.name === name);
 
 }
 
 
+// Catatan: role VIEWER punya akses ke Dashboard User,
+// tapi kemampuan INPUT data hanya untuk viewer yang
+// ditandai ketua kelas. Itu tidak dicek di sini (level
+// route), tapi di level komponen lewat field terpisah,
+// misalnya profil user punya "isKetuaKelas: true".
+export function checkRouteAccess(route, userRole) {
 
-
-
-export function checkRouteAccess(
-    route,
-    userRole
-){
-
-
-    if(!route.auth){
-
+    if (!route.auth) {
         return true;
-
     }
 
-
-
-    if(!route.roles){
-
+    if (!route.roles) {
         return false;
-
     }
 
-
-
-    return route.roles.includes(
-        userRole
-    );
-
+    return route.roles.includes(userRole);
 
 }

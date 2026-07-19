@@ -1,136 +1,88 @@
-// ======================================================
-// Permission Service
-// Sarprasin v2.0
-// ======================================================
+const permissions={
 
-import { getCurrentProfile } from "../core/user.service.js";
 
-/* ======================================================
-   PERMISSION
-====================================================== */
+SUPER_ADMIN:[
 
-export const PERMISSION = {
+"*"
 
-    /* Asset */
+],
 
-    ASSET_CREATE: "asset.create",
 
-    ASSET_READ: "asset.read",
+ADMIN_SARPRAS:[
 
-    ASSET_UPDATE: "asset.update",
+"MANAGE_ASSET",
 
-    ASSET_DELETE: "asset.delete",
+"MANAGE_USER",
 
-    /* Dashboard */
+"REPORT"
 
-    DASHBOARD_PUBLIC: "dashboard.public",
+],
 
-    DASHBOARD_EXECUTIVE: "dashboard.executive",
 
-    DASHBOARD_ADMIN: "dashboard.admin",
+GURU:[
 
-    /* Master */
+"VIEW_ASSET",
 
-    MASTER_MANAGE: "master.manage",
+"CREATE_REPORT"
 
-    /* User */
+],
 
-    USER_MANAGE: "user.manage",
 
-    /* Report */
+TU:[
 
-    REPORT_EXPORT: "report.export",
+"VIEW_ASSET"
 
-    /* Backup */
+],
 
-    BACKUP_MANAGE: "backup.manage",
 
-    /* AI */
+WALIKELAS:[
 
-    AI_MANAGE: "ai.manage"
+"VIEW_CLASS_ASSET",
+
+"CREATE_REPORT"
+
+],
+
+
+KETUA_KELAS:[
+
+"CREATE_REPORT"
+
+]
+
 
 };
 
-/* ======================================================
-   GET PERMISSIONS
-====================================================== */
 
-export async function getPermissions() {
 
-    const profile = await getCurrentProfile();
 
-    return profile?.permissions || [];
 
-}
 
-/* ======================================================
-   HAS PERMISSION
-====================================================== */
+export function hasPermission(
 
-export async function hasPermission(permission) {
+role,
 
-    const permissions = await getPermissions();
+permission
 
-    return permissions.includes(permission);
+){
 
-}
 
-/* ======================================================
-   HAS ANY
-====================================================== */
+const list=
 
-export async function hasAnyPermission(...permissions) {
+permissions[role] || [];
 
-    const owned = await getPermissions();
 
-    return permissions.some(p => owned.includes(p));
 
-}
 
-/* ======================================================
-   HAS ALL
-====================================================== */
+return (
 
-export async function hasAllPermissions(...permissions) {
+list.includes("*")
 
-    const owned = await getPermissions();
+||
 
-    return permissions.every(p => owned.includes(p));
+list.includes(permission)
 
-}
+);
 
-/* ======================================================
-   REQUIRE PERMISSION
-====================================================== */
-
-export async function requirePermission(permission) {
-
-    const allowed = await hasPermission(permission);
-
-    if (!allowed) {
-
-        throw new Error("PERMISSION_DENIED");
-
-    }
-
-    return true;
-
-}
-
-/* ======================================================
-   REQUIRE ANY
-====================================================== */
-
-export async function requireAnyPermission(...permissions) {
-
-    const allowed = await hasAnyPermission(...permissions);
-
-    if (!allowed) {
-
-        throw new Error("PERMISSION_DENIED");
-
-    }
-
-    return true;
 
 }

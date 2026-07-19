@@ -78,7 +78,7 @@ export async function createLog({
 
     };
 
-    await create(COLLECTION.LOG, payload);
+    await create(COLLECTION.LOGS, payload);
 
 }
 
@@ -88,7 +88,7 @@ export async function createLog({
 
 export async function getLogs() {
 
-    return await getAll(COLLECTION.LOG);
+    return await getAll(COLLECTION.LOGS);
 
 }
 

@@ -11,9 +11,9 @@ import {
 
 createStore,
 
-setState,
+getState,
 
-getState
+setState
 
 }
 
@@ -30,7 +30,10 @@ createStore(
 {
 
 
-items:[]
+items:[],
+
+
+unread:0
 
 
 }
@@ -44,9 +47,7 @@ items:[]
 
 export function addNotification(
 
-message,
-
-type="info"
+notification
 
 ){
 
@@ -73,20 +74,17 @@ setState(
 
 items:[
 
-...state.items,
+notification,
 
-{
+...state.items
+
+],
 
 
-id:Date.now(),
+unread:
 
-message,
+state.unread+1
 
-type
-
-}
-
-]
 
 
 }
@@ -94,7 +92,6 @@ type
 );
 
 
-
 }
 
 
@@ -102,7 +99,24 @@ type
 
 
 
-export function clearNotification(){
+
+export function markRead(
+
+id
+
+){
+
+
+
+const state=
+
+getState(
+
+"notification"
+
+);
+
+
 
 
 
@@ -113,11 +127,43 @@ setState(
 {
 
 
-items:[]
+items:
+
+state.items.map(
+
+item=>
+
+
+item.id===id
+
+?
+
+{
+
+...item,
+
+read:true
+
+}
+
+:
+
+item
+
+
+
+),
+
+
+unread:
+
+state.unread-1
+
 
 }
 
 );
+
 
 
 }

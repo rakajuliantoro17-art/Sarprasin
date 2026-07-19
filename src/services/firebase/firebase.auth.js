@@ -1,115 +1,29 @@
-// ======================================================
-// Firebase Authentication Service
-// Sarprasin v2.0
-// ======================================================
-
 import {
+
     getAuth,
+
     signInWithEmailAndPassword,
+
+    createUserWithEmailAndPassword,
+
     signOut,
-    onAuthStateChanged,
-    sendPasswordResetEmail
+
+    onAuthStateChanged
+
 } from "firebase/auth";
 
-import { app } from "./config.js";
+import { app } from "./firebase.init.js";
 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
-/**
- * Login menggunakan Email & Password
- */
-export async function login(email, password) {
-    try {
+export {
 
-        const credential = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+    signInWithEmailAndPassword,
 
-        return {
-            success: true,
-            user: credential.user
-        };
+    createUserWithEmailAndPassword,
 
-    } catch (error) {
+    signOut,
 
-        return {
-            success: false,
-            code: error.code,
-            message: error.message
-        };
+    onAuthStateChanged
 
-    }
-}
-
-/**
- * Logout
- */
-export async function logout() {
-
-    try {
-
-        await signOut(auth);
-
-        return {
-            success: true
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message: error.message
-        };
-
-    }
-
-}
-
-/**
- * Reset Password
- */
-export async function resetPassword(email) {
-
-    try {
-
-        await sendPasswordResetEmail(auth, email);
-
-        return {
-            success: true
-        };
-
-    } catch (error) {
-
-        return {
-            success: false,
-            message: error.message
-        };
-
-    }
-
-}
-
-/**
- * Mendapatkan user yang sedang login
- */
-export function getCurrentUser() {
-
-    return auth.currentUser;
-
-}
-
-/**
- * Listener perubahan status login
- */
-export function authListener(callback) {
-
-    return onAuthStateChanged(auth, callback);
-
-}
-
-/**
- * Export Auth Instance
- */
-export { auth };
+};

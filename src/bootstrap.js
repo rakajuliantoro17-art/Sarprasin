@@ -1,14 +1,69 @@
-main.js
+/*
+==================================================
 
-↓
+SARPRASIN v2.0.1
 
-bootstrap.js
+APPLICATION BOOTSTRAP
 
-↓
+==================================================
+*/
 
-init system
 
-↓
+import {
 
-start app
+initApplication
 
+}
+
+from "./init/index.js";
+
+
+
+
+export async function bootstrap(){
+
+
+try{
+
+
+console.log(
+
+"🚀 Starting SARPRASIN v2.0.1"
+
+);
+
+
+
+await initApplication();
+
+
+
+console.log(
+
+"✅ SARPRASIN Ready"
+
+);
+
+
+
+}
+
+catch(error){
+
+
+
+console.error(
+
+"❌ Application Failed",
+
+error
+
+);
+
+
+
+}
+
+
+
+}

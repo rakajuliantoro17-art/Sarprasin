@@ -1,33 +1,55 @@
 /*
 ==================================================
 
-SARPRASIN v2.0.7
-
-NOTIFICATION CONSTANT
+NOTIFICATION SERVICE
 
 ==================================================
 */
 
 
-export const NOTIFICATION_TYPE={
+import {
+
+addNotification
+
+}
+
+from "../../store/notification.store.js";
 
 
-SYSTEM:"SYSTEM",
 
 
-ASSET:"ASSET",
 
 
-MAINTENANCE:"MAINTENANCE",
+export function notify(
+
+data
+
+){
 
 
-APPROVAL:"APPROVAL",
+
+const notification={
 
 
-USER:"USER",
+
+id:
+
+Date.now(),
 
 
-REPORT:"REPORT"
+
+read:false,
+
+
+
+createdAt:
+
+new Date(),
+
+
+
+...data
+
 
 
 };
@@ -35,19 +57,80 @@ REPORT:"REPORT"
 
 
 
-export const PRIORITY={
+
+addNotification(
+
+notification
+
+);
 
 
-LOW:"LOW",
+
+return notification;
 
 
-NORMAL:"NORMAL",
+}
 
 
-HIGH:"HIGH",
 
 
-URGENT:"URGENT"
 
 
-};
+
+
+
+export function success(
+
+message
+
+){
+
+
+
+return notify({
+
+type:"SYSTEM",
+
+title:"Berhasil",
+
+message,
+
+priority:"NORMAL"
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+export function error(
+
+message
+
+){
+
+
+
+return notify({
+
+type:"SYSTEM",
+
+title:"Error",
+
+message,
+
+priority:"HIGH"
+
+
+});
+
+
+}

@@ -1,68 +1,187 @@
-export {
+/*
+==================================================
 
-appStore
+SARPRASIN v2.0.4
 
-} from "./app/app.store.js";
+GLOBAL STORE ENGINE
 
-
-export {
-
-authStore
-
-} from "./auth/auth.store.js";
+==================================================
+*/
 
 
-export {
-
-userStore
-
-} from "./user/user.store.js";
+const stores={};
 
 
-export {
-
-assetStore
-
-} from "./asset/asset.store.js";
+const listeners={};
 
 
-export {
-
-roomStore
-
-} from "./room/room.store.js";
 
 
-export {
 
-maintenanceStore
+export function createStore(
 
-} from "./maintenance/maintenance.store.js";
+name,
 
+initialState
 
-export {
-
-reportStore
-
-} from "./report/report.store.js";
+){
 
 
-export {
 
-notificationStore
-
-} from "./notification/notification.store.js";
+stores[name]=initialState;
 
 
-export {
-
-settingsStore
-
-} from "./settings/settings.store.js";
+listeners[name]=[];
 
 
-export {
 
-cacheStore
+return stores[name];
 
-} from "./cache/cache.store.js";
+}
+
+
+
+
+
+
+
+export function getState(
+
+name
+
+){
+
+
+
+return stores[name];
+
+
+}
+
+
+
+
+
+
+
+export function setState(
+
+name,
+
+value
+
+){
+
+
+
+stores[name]={
+
+
+...stores[name],
+
+...value
+
+
+};
+
+
+
+
+notify(name);
+
+
+
+}
+
+
+
+
+
+
+
+export function subscribe(
+
+name,
+
+callback
+
+){
+
+
+
+listeners[name].push(
+
+callback
+
+);
+
+
+
+return ()=>{
+
+
+listeners[name]=listeners[name]
+
+.filter(
+
+item=>item!==callback
+
+);
+
+
+};
+
+
+
+}
+
+
+
+
+
+
+
+function notify(
+
+name
+
+){
+
+
+
+listeners[name]
+
+.forEach(
+
+callback=>
+
+callback(
+
+stores[name]
+
+)
+
+);
+
+
+}
+
+
+
+
+
+
+
+export function initializeStore(){
+
+
+
+console.log(
+
+"Global Store Ready"
+
+);
+
+
+
+}

@@ -1,153 +1,128 @@
 /*
 ==========================================================
-SARPRASIN v2.0
 
-LOGIN CONTROLLER
+SARPRASIN
+LOGIN PAGE CONTROLLER
 
-Version : 1.0.0
+Version : 2.1.0
+
 ==========================================================
 */
 
+import { login } from "../../services/auth/auth.service.js";
 
-import {
+const form = document.getElementById("loginForm");
+const message = document.getElementById("loginMessage");
+const submitButton = form?.querySelector('button[type="submit"]');
 
-auth
+function setMessage(text = "", type = "info") {
 
-}
+    if (!message) return;
 
-from "../../services/firebase/index.js";
-
-
-
-import {
-
-signInWithEmailAndPassword
+    message.textContent = text;
+    message.className = `login-message ${type}`;
 
 }
 
-from 
-"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+function setLoading(isLoading) {
 
+    if (!submitButton) return;
 
+    submitButton.disabled = isLoading;
 
-import {
-
-getRouteByName
-
-}
-
-from "../../config/routes.js";
-
-
-
-
-
-const form = 
-document.getElementById(
-"loginForm"
-);
-
-
-
-const message =
-document.getElementById(
-"loginMessage"
-);
-
-
-
-
-
-form.addEventListener(
-"submit",
-async(e)=>{
-
-
-e.preventDefault();
-
-
-
-const email =
-document.getElementById(
-"email"
-).value;
-
-
-
-const password =
-document.getElementById(
-"password"
-).value;
-
-
-
-try{
-
-
-message.innerHTML =
-"Memproses login...";
-
-
-
-const result =
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-
-
-const user =
-result.user;
-
-
-
-localStorage.setItem(
-"sarprasin_user",
-JSON.stringify({
-
-uid:user.uid,
-
-email:user.email
-
-})
-);
-
-
-
-
-message.innerHTML =
-"Login berhasil...";
-
-
-
-setTimeout(()=>{
-
-
-window.location.href =
-"/dashboard";
-
-
-},1000);
-
-
+    submitButton.textContent = isLoading
+        ? "Memproses..."
+        : "Masuk";
 
 }
 
-catch(error){
+async function handleLogin(event) {
 
+    event.preventDefault();
 
+    const email = document
+        .getElementById("email")
+        .value
+        .trim();
 
-message.innerHTML =
-"Email atau password salah";
+    const password = document
+        .getElementById("password")
+        .value;
 
+    if (!email || !password) {
 
-console.error(error);
+        setMessage(
+            "Email dan password wajib diisi.",
+            "warning"
+        );
 
+        return;
+
+    }
+
+    try {
+
+        setLoading(true);
+
+        setMessage(
+            "Sedang masuk ke sistem...",
+            "info"
+        );
+
+        /*
+        ======================================================
+        AuthService akan menangani:
+
+        ✓ Firebase Authentication
+
+        ✓ Ambil profile Firestore
+
+        ✓ Ambil role
+
+        ✓ Ambil permission
+
+        ✓ Simpan ke auth.store
+
+        ✓ Simpan ke user.store
+
+        ✓ Redirect sesuai role
+
+        ======================================================
+        */
+
+        await login(email, password);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        setMessage(
+
+            error?.message ||
+
+            "Email atau password salah.",
+
+            "error"
+
+        );
+
+    }
+
+    finally {
+
+        setLoading(false);
+
+    }
 
 }
 
+if (form) {
 
+    form.addEventListener(
+        "submit",
+        handleLogin
+    );
 
-});
+}

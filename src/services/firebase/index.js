@@ -1,65 +1,52 @@
-// ======================================================
-// Firebase Service Barrel Export
-// Sarprasin v2.0
-// ======================================================
+/*
+==========================================================
+
+SARPRASIN
+Firebase Barrel Export
+
+Version : 2.1.x
+
+==========================================================
+*/
 
 /* ======================================================
-   CONFIG
+   INITIALIZATION
 ====================================================== */
 
-export {
-    app,
-    auth,
-    db,
-    storage
-} from "./config.js";
+export * from "./firebase.init.js";
 
 /* ======================================================
-   AUTH
+   CONFIGURATION
 ====================================================== */
 
-export {
-    login,
-    logout,
-    resetPassword,
-    getCurrentUser,
-    authListener
-} from "./auth.js";
+export * from "./firebase.config.js";
+
+/* ======================================================
+   AUTHENTICATION
+====================================================== */
+
+export * from "./firebase.auth.js";
 
 /* ======================================================
    FIRESTORE
 ====================================================== */
 
-export {
-    COLLECTION,
-    getAll,
-    getById,
-    create,
-    createWithId,
-    update,
-    remove,
-    getWhere,
-    getOrdered,
-    getLimited
-} from "./firestore.js";
+export * from "./firebase.firestore.js";
 
 /* ======================================================
    STORAGE
 ====================================================== */
 
-export {
-    STORAGE,
-    uploadFile,
-    uploadFileWithProgress,
-    deleteFile
-} from "./storage.js";
+export * from "./firebase.storage.js";
 
 /* ======================================================
    ANALYTICS
 ====================================================== */
 
-export {
-    initAnalytics,
-    trackEvent,
-    EVENTS
-} from "./analytics.js";
+export * from "./firebase.analytics.js";
+
+/* ======================================================
+   HELPERS
+====================================================== */
+
+export * from "./firebase.helper.js";

@@ -1,137 +1,80 @@
-// ======================================================
-// Authentication Service
-// Sarprasin v2.0
-// ======================================================
+/*
+==================================================
+
+AUTH SERVICE
+
+==================================================
+*/
+
 
 import {
-    login,
-    logout,
-    resetPassword,
-    authListener,
-    getCurrentUser
-} from "../firebase";
 
-import {
-    getCurrentProfile,
-    updateUser
-} from "../core/user.service.js";
+saveSession,
 
-import {
-    createLog,
-    LOG_ACTION
-} from "../core/log.service.js";
-
-import {
-    trackEvent,
-    EVENTS
-} from "../firebase";
-
-/* ======================================================
-   LOGIN
-====================================================== */
-
-export async function signIn(email, password) {
-
-    const credential = await login(email, password);
-
-    const profile = await getCurrentProfile();
-
-    if (!profile) {
-
-        throw new Error("Profil pengguna tidak ditemukan.");
-
-    }
-
-    if (profile.status !== "aktif") {
-
-        await logout();
-
-        throw new Error("Akun tidak aktif.");
-
-    }
-
-    await updateUser(profile.uid, {
-
-        lastLogin: new Date().toISOString()
-
-    });
-
-    await createLog({
-
-        action: LOG_ACTION.LOGIN,
-
-        description: "Login berhasil"
-
-    });
-
-    trackEvent(EVENTS.LOGIN);
-
-    return {
-
-        auth: credential.user,
-
-        profile
-
-    };
+clearSession
 
 }
 
-/* ======================================================
-   LOGOUT
-====================================================== */
+from "./session.service.js";
 
-export async function signOut() {
 
-    await createLog({
 
-        action: LOG_ACTION.LOGOUT,
 
-        description: "Logout"
 
-    });
+export async function login(
 
-    trackEvent(EVENTS.LOGOUT);
+email,
 
-    await logout();
+password
 
-}
+){
 
-/* ======================================================
-   RESET PASSWORD
-====================================================== */
 
-export async function forgotPassword(email) {
 
-    await resetPassword(email);
+/*
 
-}
+Firebase Auth nanti
 
-/* ======================================================
-   CURRENT USER
-====================================================== */
+*/
 
-export function currentUser() {
 
-    return getCurrentUser();
+const user={
 
-}
 
-/* ======================================================
-   AUTH STATE
-====================================================== */
+email,
 
-export function onAuthChanged(callback) {
 
-    return authListener(callback);
+role:"ADMIN_SARPRAS"
+
+
+};
+
+
+
+
+
+saveSession(user);
+
+
+
+return user;
+
 
 }
 
-/* ======================================================
-   CHECK LOGIN
-====================================================== */
 
-export function isAuthenticated() {
 
-    return getCurrentUser() !== null;
+
+
+
+export function logout(){
+
+
+
+clearSession();
+
+
+location.href="/login";
+
 
 }

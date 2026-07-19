@@ -1,8 +1,9 @@
 /*
 ==================================================
-SARPRASIN v2.0
 
-MAIN ROUTER
+SARPRASIN v2.0.2
+
+ROUTER ENGINE
 
 ==================================================
 */
@@ -17,10 +18,9 @@ routes
 from "./routes.js";
 
 
-
 import {
 
-checkAuth
+checkAuthGuard
 
 }
 
@@ -28,78 +28,85 @@ from "./auth-guard.js";
 
 
 
-import {
 
-checkRole
+let currentRoute=null;
+
+
+
+
+
+
+export function initializeRouter(){
+
+
+
+window.addEventListener(
+
+"popstate",
+
+()=>{
+
+navigate(
+
+location.pathname
+
+);
 
 }
-
-from "./role-guard.js";
-
-
-
-
-
-
-
-export async function navigate(path){
-
-
-
-const route =
-
-routes.find(
-
-item=>item.path===path
 
 );
 
 
+
+
+
+navigate(
+
+location.pathname
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+export async function navigate(
+
+path
+
+){
+
+
+
+const route=
+
+routes.find(
+
+item=>
+
+item.path===path
+
+);
 
 
 
 if(!route){
 
 
-location.href=
 
-"/public/404.html";
+return navigate(
 
+"/"
 
-return;
-
-
-}
-
-
-
-
-
-
-
-if(route.auth){
-
-
-
-const user =
-
-await checkAuth();
-
-
-
-if(!user){
-
-
-location.href=
-
-"/public/login.html";
-
-
-return;
-
-
-}
-
+);
 
 
 }
@@ -108,32 +115,35 @@ return;
 
 
 
+const allowed=
 
+await checkAuthGuard(
 
+route
 
-if(route.role){
-
-
-const allowed =
-
-await checkRole(
-route.role
 );
 
 
 
-if(!allowed){
 
 
-location.href=
-
-"/public/unauthorized.html";
-
+if(!allowed)
 
 return;
 
 
-}
+
+
+
+currentRoute=route;
+
+
+
+await loadPage(
+
+route.page
+
+);
 
 
 
@@ -145,9 +155,48 @@ return;
 
 
 
-location.href=
 
-route.page;
+
+async function loadPage(
+
+page
+
+){
+
+
+
+const app=
+
+document.getElementById(
+
+"app"
+
+);
+
+
+
+
+
+const response=
+
+await fetch(
+
+`/src/pages/${page}`
+
+);
+
+
+
+const html=
+
+await response.text();
+
+
+
+
+
+app.innerHTML=html;
+
 
 
 }

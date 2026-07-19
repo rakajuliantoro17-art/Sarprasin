@@ -1,11 +1,12 @@
 <!--
 ==========================================================
-SARPRASIN v2.0
-SMANSASOO Digital System
+SARPRASIN
+Smart School Asset Management System
 
 LOGIN PAGE
 
-Version : 1.0.0
+Version : 2.1.0
+Author  : SMAN 1 Sooko Mojokerto
 ==========================================================
 -->
 
@@ -13,233 +14,291 @@ Version : 1.0.0
 
 <html lang="id">
 
-
 <head>
 
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
+    <meta
+        name="description"
+        content="SARPRASIN - Smart School Asset Management System">
 
-<meta 
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="theme-color"
+        content="#0F172A">
 
+    <title>
+        Login | SARPRASIN
+    </title>
 
-<title>
-Login | SARPRASIN v2.0
-</title>
+    <!-- ======================================================
+         ICON
+    ======================================================= -->
 
+    <link
+        rel="icon"
+        href="/src/assets/icons/icon.png">
 
+    <!-- ======================================================
+         GLOBAL CSS
+    ======================================================= -->
 
-<link 
-rel="icon"
-href="../../assets/img/favicon.ico"
->
+    <link
+        rel="stylesheet"
+        href="/src/assets/css/variables.css">
 
+    <link
+        rel="stylesheet"
+        href="/src/assets/css/style.css">
 
+    <link
+        rel="stylesheet"
+        href="/src/assets/css/responsive.css">
 
-<link
-rel="stylesheet"
-href="../../assets/css/app.css"
->
+    <!-- ======================================================
+         LOGIN CSS
+    ======================================================= -->
 
-
-<link
-rel="stylesheet"
-href="./style.css"
->
-
+    <link
+        rel="stylesheet"
+        href="./style.css">
 
 </head>
 
-
-
 <body class="login-body">
 
+    <!-- ======================================================
+         BACKGROUND
+    ======================================================= -->
 
+    <div class="login-background"></div>
 
-<div class="login-container">
+    <div class="login-overlay"></div>
 
+    <!-- ======================================================
+         LOGIN
+    ======================================================= -->
 
+    <main class="login-container">
 
-    <div class="login-card">
+        <section class="login-card">
 
+            <!-- ==========================
+                 BRAND
+            =========================== -->
 
+            <header class="login-brand">
 
-        <!-- LOGO -->
+                <img
+                    src="/src/assets/icons/icon.png"
+                    alt="SARPRASIN"
+                    class="login-logo">
 
-        <div class="login-brand">
+                <h1>
+                    SARPRASIN
+                </h1>
 
+                <p>
+                    Smart School Asset Management System
+                </p>
 
-            <img
-            src="../../assets/img/logo.png"
-            alt="SMANSASOO"
-            >
+            </header>
 
+            <!-- ==========================
+                 LOGIN FORM
+            =========================== -->
 
-            <h1>
-            SARPRASIN
-            </h1>
+            <form
+                id="loginForm"
+                autocomplete="on"
+                novalidate>
 
+                <div class="form-group">
 
-            <p>
-            Smart School Asset Management System
-            </p>
+                    <label for="email">
 
+                        Email
 
-        </div>
-
-
-
-
-
-        <!-- LOGIN FORM -->
-
-
-        <form
-        id="loginForm"
-        >
-
-
-
-            <div class="form-group">
-
-
-                <label>
-                Email
-                </label>
-
-
-                <input
-                type="email"
-                id="email"
-                placeholder="email pengguna"
-                required
-                >
-
-
-            </div>
-
-
-
-
-
-            <div class="form-group">
-
-
-                <label>
-                Password
-                </label>
-
-
-                <input
-                type="password"
-                id="password"
-                placeholder="password"
-                required
-                >
-
-
-            </div>
-
-
-
-
-
-
-            <div class="login-option">
-
-
-                <label>
-
+                    </label>
 
                     <input
-                    type="checkbox"
-                    id="remember"
-                    >
+                        id="email"
+                        type="email"
+                        autocomplete="username"
+                        placeholder="nama@sman1sooko.sch.id"
+                        required>
 
+                </div>
 
-                    Ingat saya
+                <div class="form-group">
 
+                    <label for="password">
 
-                </label>
+                        Password
 
+                    </label>
 
-            </div>
+                    <div class="password-wrapper">
 
+                        <input
+                            id="password"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="Masukkan password"
+                            required>
 
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            aria-label="Tampilkan Password">
 
+                            👁
 
+                        </button>
 
+                    </div>
 
+                </div>
 
-            <button
-            type="submit"
-            class="login-button"
-            >
+                <div class="login-options">
 
+                    <label class="remember-me">
 
-                Masuk
+                        <input
+                            id="remember"
+                            type="checkbox">
 
+                        <span>
+                            Ingat Saya
+                        </span>
 
-            </button>
+                    </label>
 
+                    <a
+                        href="/src/pages/public/forgot-password.html"
+                        class="forgot-password">
 
+                        Lupa Password?
 
+                    </a>
 
+                </div>
 
-            <div
-            id="loginMessage"
-            class="login-message"
-            >
+                <button
+                    type="submit"
+                    class="login-button">
 
+                    Masuk ke SARPRASIN
 
-            </div>
+                </button>
 
+                <div
+                    id="loginMessage"
+                    class="login-message"
+                    role="status"
+                    aria-live="polite">
 
+                </div>
 
-        </form>
+            </form>
 
+            <!-- ==========================
+                 SYSTEM STATUS
+            =========================== -->
 
+            <section class="system-status">
 
+                <div class="status-item">
 
+                    <span class="status-label">
 
+                        Sistem
 
-        <!-- FOOTER -->
+                    </span>
 
+                    <span
+                        id="systemStatus"
+                        class="status-value">
 
-        <div class="login-footer">
+                        Siap
 
+                    </span>
 
-            <p>
-            © 2026 SMAN 1 Sooko Mojokerto
-            </p>
+                </div>
 
+                <div class="status-item">
 
-        </div>
+                    <span class="status-label">
 
+                        Firebase
 
+                    </span>
 
+                    <span
+                        id="firebaseStatus"
+                        class="status-value">
 
-    </div>
+                        Connecting...
 
+                    </span>
 
+                </div>
 
+                <div class="status-item">
 
-</div>
+                    <span class="status-label">
 
+                        Versi
 
+                    </span>
 
+                    <span class="status-value">
 
-<script
-type="module"
-src="./script.js"
-></script>
+                        v2.1.0
 
+                    </span>
 
+                </div>
+
+            </section>
+
+            <!-- ==========================
+                 FOOTER
+            =========================== -->
+
+            <footer class="login-footer">
+
+                <p>
+
+                    © 2026 SMAN 1 Sooko Mojokerto
+
+                </p>
+
+                <small>
+
+                    SARPRASIN • Smart School Asset Management
+
+                </small>
+
+            </footer>
+
+        </section>
+
+    </main>
+
+    <!-- ======================================================
+         LOGIN SCRIPT
+    ======================================================= -->
+
+    <script
+        type="module"
+        src="./script.js">
+    </script>
 
 </body>
-
 
 </html>

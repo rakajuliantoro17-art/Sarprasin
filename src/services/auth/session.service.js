@@ -1,132 +1,70 @@
-// ======================================================
-// Session Service
-// Sarprasin v2.0
-// ======================================================
+/*
+==================================================
 
-import { currentUser } from "./auth.service.js";
-import { getProfile } from "./profile.service.js";
+SESSION SERVICE
 
-/* ======================================================
-   SESSION CACHE
-====================================================== */
+==================================================
+*/
 
-let session = null;
 
-/* ======================================================
-   CREATE SESSION
-====================================================== */
+const KEY=
 
-export async function createSession() {
+"sarprasin_user";
 
-    const auth = currentUser();
 
-    if (!auth) {
 
-        session = null;
-        return null;
 
-    }
+export function saveSession(
 
-    const profile = await getProfile();
+user
 
-    session = {
+){
 
-        uid: auth.uid,
 
-        email: auth.email,
+localStorage.setItem(
 
-        profile,
+KEY,
 
-        loginAt: new Date().toISOString(),
+JSON.stringify(user)
 
-        lastActivity: Date.now()
+);
 
-    };
-
-    return session;
 
 }
 
-/* ======================================================
-   GET SESSION
-====================================================== */
 
-export async function getSession() {
 
-    if (!session) {
 
-        await createSession();
+export function getSession(){
 
-    }
 
-    return session;
+const data=
 
-}
+localStorage.getItem(KEY);
 
-/* ======================================================
-   REFRESH SESSION
-====================================================== */
 
-export async function refreshSession() {
 
-    session = null;
+return data
 
-    return await createSession();
+?
+
+JSON.parse(data)
+
+:
+
+null;
+
 
 }
 
-/* ======================================================
-   UPDATE ACTIVITY
-====================================================== */
 
-export function updateActivity() {
 
-    if (!session) return;
 
-    session.lastActivity = Date.now();
+export function clearSession(){
 
-}
 
-/* ======================================================
-   GET LAST ACTIVITY
-====================================================== */
 
-export function getLastActivity() {
+localStorage.removeItem(KEY);
 
-    return session?.lastActivity || null;
-
-}
-
-/* ======================================================
-   SESSION AGE
-====================================================== */
-
-export function getSessionAge() {
-
-    if (!session) return 0;
-
-    return Date.now() - session.lastActivity;
-
-}
-
-/* ======================================================
-   CHECK ACTIVE
-====================================================== */
-
-export function isSessionActive(timeout = 30 * 60 * 1000) {
-
-    if (!session) return false;
-
-    return (Date.now() - session.lastActivity) < timeout;
-
-}
-
-/* ======================================================
-   CLEAR SESSION
-====================================================== */
-
-export function clearSession() {
-
-    session = null;
 
 }

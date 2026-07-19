@@ -78,3 +78,14 @@ location.href="/login";
 
 
 }
+login(email,password)
+
+logout()
+
+register()
+
+forgotPassword()
+
+refreshSession()
+
+getCurrentUser()

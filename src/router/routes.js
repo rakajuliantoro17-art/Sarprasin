@@ -1,6 +1,7 @@
 /*
 ==================================================
-SARPRASIN v2.0
+
+SARPRASIN v2.0.2
 
 ROUTE CONFIGURATION
 
@@ -8,59 +9,106 @@ ROUTE CONFIGURATION
 */
 
 
-export const routes = [
+export const routes=[
 
 
 
-// =====================
-// PUBLIC
-// =====================
+/*
+====================
+PUBLIC ROUTES
+====================
+*/
 
 
 {
+
 path:"/",
-page:"/public/landing.html",
+
+page:"public/home.html",
+
 public:true
+
 },
 
 
 
 {
+
 path:"/login",
-page:"/public/login.html",
+
+page:"public/login.html",
+
 public:true
+
 },
 
 
 
 {
-path:"/register",
-page:"/public/register.html",
+
+path:"/forgot-password",
+
+page:"public/forgot-password.html",
+
 public:true
+
 },
 
 
 
 {
-path:"/status",
-page:"/public/status.html",
+
+path:"/help",
+
+page:"public/help.html",
+
 public:true
+
 },
 
 
 
 {
-path:"/version",
-page:"/public/version.html",
+
+path:"/contact",
+
+page:"public/contact.html",
+
 public:true
+
+},
+
+
+
+
+
+/*
+====================
+SYSTEM ROUTES
+====================
+*/
+
+
+{
+
+path:"/offline",
+
+page:"public/offline.html",
+
+public:true
+
 },
 
 
 
 {
-path:"/release-notes",
-page:"/public/release-notes.html",
+
+path:"/maintenance",
+
+page:"public/maintenance.html",
+
 public:true
+
 },
 
 
@@ -68,73 +116,52 @@ public:true
 
 
 
-
-// =====================
-// DASHBOARD
-// =====================
+/*
+====================
+PRIVATE ROUTES
+====================
+*/
 
 
 {
+
 path:"/dashboard",
-page:"/pages/dashboard/index.html",
-auth:true
+
+page:"dashboard/index.html",
+
+auth:true,
+
+roles:[
+
+"ADMIN",
+
+"OPERATOR",
+
+"PIMPINAN"
+
+]
+
 },
 
 
 
-
-
-
-
-// =====================
-// ADMIN
-// =====================
-
-
 {
-path:"/admin",
-page:"/pages/admin/index.html",
+
+path:"/assets",
+
+page:"dashboard/assets.html",
+
 auth:true,
-role:"admin"
-},
 
+roles:[
 
+"ADMIN",
 
+"OPERATOR"
 
+]
 
-
-
-// =====================
-// EXECUTIVE
-// =====================
-
-
-{
-path:"/executive",
-page:"/pages/executive/index.html",
-auth:true,
-role:"executive"
-},
-
-
-
-
-
-
-
-// =====================
-// STAFF
-// =====================
-
-
-{
-path:"/staff",
-page:"/pages/staff/index.html",
-auth:true,
-role:"staff"
 }
-
-
 
 
 

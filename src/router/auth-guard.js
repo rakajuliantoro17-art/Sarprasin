@@ -1,163 +1,48 @@
 /*
 ==================================================
-SARPRASIN v2.0
 
 AUTH GUARD
 
-Firebase Authentication Middleware
-
-Version : 2.0.0
-
 ==================================================
 */
 
 
 import {
 
-auth
+getCurrentUser
 
 }
 
-from "../config/firebase.js";
+from "../store/auth.store.js";
 
 
 
-import {
 
-onAuthStateChanged,
-signOut
 
-}
 
-from "firebase/auth";
+export async function checkAuthGuard(
 
+route
 
+){
 
-import {
 
-authStore
 
-}
+if(
 
-from "../store/index.js";
+!route.auth
 
+)
 
+return true;
 
 
 
 
-/*
-==================================================
-CHECK AUTH STATE
 
-Return:
-- user object
-- null
+const user=
 
-==================================================
-*/
-
-
-export function checkAuth(){
-
-
-
-return new Promise(
-
-(resolve)=>{
-
-
-
-const unsubscribe =
-
-onAuthStateChanged(
-
-auth,
-
-(user)=>{
-
-
-
-
-
-if(user){
-
-
-
-authStore.setUser(user);
-
-
-
-resolve(user);
-
-
-
-}
-
-else{
-
-
-
-authStore.logout();
-
-
-
-resolve(null);
-
-
-
-}
-
-
-
-
-
-unsubscribe();
-
-
-
-}
-
-
-
-);
-
-
-
-}
-
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-==================================================
-REQUIRE AUTH
-
-Proteksi halaman
-
-==================================================
-*/
-
-
-export async function requireAuth(){
-
-
-
-const user =
-
-await checkAuth();
+getCurrentUser();
 
 
 
@@ -167,11 +52,65 @@ if(!user){
 
 
 
-redirectLogin();
+window.history.pushState(
+
+{},
+
+"",
+
+"/login"
+
+);
+
+
+
+location.reload();
+
 
 
 return false;
 
+
+}
+
+
+
+
+
+
+if(
+
+route.roles
+
+&&
+
+!route.roles.includes(
+
+user.role
+
+)
+
+){
+
+
+
+window.history.pushState(
+
+{},
+
+"",
+
+"/unauthorized"
+
+);
+
+
+
+location.reload();
+
+
+
+return false;
 
 
 }
@@ -181,195 +120,6 @@ return false;
 
 
 return true;
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-==================================================
-LOGIN REDIRECT
-
-==================================================
-*/
-
-
-function redirectLogin(){
-
-
-
-const currentPath =
-
-encodeURIComponent(
-
-window.location.pathname
-
-);
-
-
-
-
-
-window.location.href =
-
-
-`/public/login.html?redirect=${currentPath}`;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-==================================================
-GET CURRENT USER
-
-==================================================
-*/
-
-
-export function getCurrentUser(){
-
-
-
-return auth.currentUser;
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-==================================================
-LOGOUT HANDLER
-
-==================================================
-*/
-
-
-export async function logoutUser(){
-
-
-
-try{
-
-
-
-await signOut(auth);
-
-
-
-authStore.logout();
-
-
-
-
-
-window.location.href =
-
-"/public/login.html";
-
-
-
-}
-
-
-
-catch(error){
-
-
-
-console.error(
-
-"Logout failed:",
-
-error
-
-);
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-/*
-==================================================
-CHECK SESSION
-
-Dipanggil saat aplikasi load
-
-==================================================
-*/
-
-
-export function initAuthListener(){
-
-
-
-onAuthStateChanged(
-
-auth,
-
-(user)=>{
-
-
-
-if(user){
-
-
-
-authStore.setUser(user);
-
-
-}
-
-else{
-
-
-authStore.logout();
-
-
-}
-
-
-
-}
-
-
-
-);
-
 
 
 }

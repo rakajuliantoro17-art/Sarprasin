@@ -1,48 +1,124 @@
+/*
+==================================================
+
+AUTH STORE
+
+==================================================
+*/
+
+
 import {
 
-getSession
+createStore,
+
+getState,
+
+setState
 
 }
 
-from "../services/auth/session.service.js";
+from "./index.js";
 
 
 
 
-let user=null;
+
+createStore(
+
+"auth",
+
+{
 
 
+user:null,
 
-export function initAuth(){
 
+authenticated:false
 
-user=
-
-getSession();
 
 
 }
+
+);
+
+
+
+
+
+
+export function setUser(
+
+user
+
+){
+
+
+
+setState(
+
+"auth",
+
+{
+
+
+user,
+
+
+authenticated:true
+
+
+}
+
+);
+
+
+}
+
+
+
+
+
+
+export function logoutUser(){
+
+
+
+setState(
+
+"auth",
+
+{
+
+
+user:null,
+
+
+authenticated:false
+
+
+}
+
+);
+
+
+}
+
+
+
 
 
 
 export function getCurrentUser(){
 
 
-return user;
 
+return getState(
 
-}
+"auth"
 
+)
 
-
-export function setUser(
-
-data
-
-){
-
-
-user=data;
+.user;
 
 
 }

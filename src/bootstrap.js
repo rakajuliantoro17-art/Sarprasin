@@ -64,6 +64,6 @@ error
 
 }
 
-
+import "./services/firebase/firebase.init.js";
 
 }

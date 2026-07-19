@@ -1,69 +1,77 @@
 /*
-==================================================
+==========================================================
 
-SARPRASIN v2.0.1
+SARPRASIN
+Application Bootstrap
 
-APPLICATION BOOTSTRAP
+Version : 2.1.x
+Author  : SMAN 1 Sooko Mojokerto
 
-==================================================
+----------------------------------------------------------
+Tanggung Jawab:
+- Memulai aplikasi
+- Menangani startup
+- Menangani fatal startup error
+
+Seluruh proses inisialisasi dilakukan oleh:
+src/init/index.js
+
+==========================================================
 */
 
+import { initApplication } from "./init/index.js";
 
-import {
+/**
+ * Bootstrap SARPRASIN
+ */
+export async function bootstrap() {
 
-initApplication
+    console.group("🚀 SARPRASIN Bootstrap");
 
-}
+    console.time("Application Startup");
 
-from "./init/index.js";
+    try {
 
+        console.info("Starting application...");
 
+        await initApplication();
 
+        console.info("Application initialized successfully.");
 
-export async function bootstrap(){
+        console.timeEnd("Application Startup");
 
+        console.groupEnd();
 
-try{
+        return true;
 
+    } catch (error) {
 
-console.log(
+        console.timeEnd("Application Startup");
 
-"🚀 Starting SARPRASIN v2.0.1"
+        console.groupEnd();
 
-);
+        console.error(
+            "❌ Fatal startup error:",
+            error
+        );
 
+        // Future:
+        // Logger.error(error);
+        // ErrorService.handle(error);
+        // ShowStartupErrorScreen(error);
 
+        return false;
 
-await initApplication();
-
-
-
-console.log(
-
-"✅ SARPRASIN Ready"
-
-);
-
-
-
-}
-
-catch(error){
-
-
-
-console.error(
-
-"❌ Application Failed",
-
-error
-
-);
-
-
+    }
 
 }
 
-import "./services/firebase/firebase.init.js";
-
-}
+/**
+ * Auto Bootstrap
+ *
+ * Jika index.html menggunakan:
+ *
+ * <script type="module" src="/src/main.js"></script>
+ *
+ * maka main.js cukup memanggil bootstrap().
+ */

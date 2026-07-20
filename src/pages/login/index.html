@@ -40,26 +40,21 @@ Author  : SMAN 1 Sooko Mojokerto
 
     <link
         rel="icon"
-        href="/src/assets/icons/icon.png">
+        href="/logo/icon.png">
 
     <!-- ======================================================
          GLOBAL CSS
+         (app.css meng-@import semua modul, termasuk
+         pages/login.css — dipertahankan agar token &
+         efek glass identik dengan app utama)
     ======================================================= -->
 
     <link
         rel="stylesheet"
-        href="/src/assets/css/variables.css">
-
-    <link
-        rel="stylesheet"
-        href="/src/assets/css/style.css">
-
-    <link
-        rel="stylesheet"
-        href="/src/assets/css/responsive.css">
+        href="/src/assets/css/app.css">
 
     <!-- ======================================================
-         LOGIN CSS
+         LOGIN PAGE-SPECIFIC CSS (override/tambahan lokal)
     ======================================================= -->
 
     <link
@@ -93,7 +88,7 @@ Author  : SMAN 1 Sooko Mojokerto
             <header class="login-brand">
 
                 <img
-                    src="/src/assets/icons/icon.png"
+                    src="/logo/icon.png"
                     alt="SARPRASIN"
                     class="login-logo">
 

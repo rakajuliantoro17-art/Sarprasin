@@ -288,13 +288,13 @@ Version : 1.0.0
 
     backdrop-filter:
 
-    blur(20px);
+    saturate(180%) blur(20px);
 
 
 
     -webkit-backdrop-filter:
 
-    blur(20px);
+    saturate(180%) blur(20px);
 
 
 

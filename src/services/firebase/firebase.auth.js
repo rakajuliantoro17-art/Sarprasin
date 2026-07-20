@@ -8,7 +8,9 @@ import {
 
     signOut,
 
-    onAuthStateChanged
+    onAuthStateChanged,
+
+    sendPasswordResetEmail
 
 } from "firebase/auth";
 
@@ -24,6 +26,8 @@ export {
 
     signOut,
 
-    onAuthStateChanged
+    onAuthStateChanged,
+
+    sendPasswordResetEmail
 
 };

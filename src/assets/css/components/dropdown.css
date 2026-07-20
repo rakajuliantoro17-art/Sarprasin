@@ -128,9 +128,9 @@
 
     background:var(--glass-bg);
 
-    backdrop-filter:blur(var(--blur));
+    backdrop-filter:saturate(180%) blur(var(--blur));
 
-    -webkit-backdrop-filter:blur(var(--blur));
+    -webkit-backdrop-filter:saturate(180%) blur(var(--blur));
 
     border:1px solid var(--glass-border);
 

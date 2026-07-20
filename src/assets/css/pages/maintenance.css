@@ -113,7 +113,7 @@ Version : 1.0.0
 
     backdrop-filter:
 
-    blur(15px);
+    saturate(180%) blur(15px);
 
 
 
@@ -265,7 +265,7 @@ Version : 1.0.0
 
     backdrop-filter:
 
-    blur(18px);
+    saturate(180%) blur(18px);
 
 
 

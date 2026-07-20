@@ -215,9 +215,9 @@
 
     border:1px solid var(--glass-border);
 
-    backdrop-filter:blur(var(--blur));
+    backdrop-filter:saturate(180%) blur(var(--blur));
 
-    -webkit-backdrop-filter:blur(var(--blur));
+    -webkit-backdrop-filter:saturate(180%) blur(var(--blur));
 
     color:var(--text-primary);
 

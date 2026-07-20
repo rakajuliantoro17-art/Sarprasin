@@ -6,6 +6,8 @@ import {
 
     uploadBytes,
 
+    uploadBytesResumable,
+
     getDownloadURL,
 
     deleteObject
@@ -23,6 +25,8 @@ export {
     ref,
 
     uploadBytes,
+
+    uploadBytesResumable,
 
     getDownloadURL,
 

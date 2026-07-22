@@ -9,6 +9,30 @@ AUTH SERVICE
 
 import {
 
+login as firebaseLogin,
+
+logout as firebaseLogout,
+
+getById,
+
+COLLECTION
+
+}
+
+from "../firebase/index.js";
+
+import {
+
+setUser,
+
+logoutUser
+
+}
+
+from "../../store/auth.store.js";
+
+import {
+
 saveSession,
 
 clearSession
@@ -17,6 +41,23 @@ clearSession
 
 from "./session.service.js";
 
+
+
+// Kemana user diarahkan setelah login, berdasarkan role.
+// Sesuai pemetaan 4 dashboard (lihat src/router/routes.js).
+const ROLE_REDIRECT = {
+
+    admin: "/admin",
+    waka_sarpras: "/admin",
+    staff: "/admin",
+    arsiparis: "/admin",
+
+    operator: "/user",
+    guru: "/user",
+    wali_kelas: "/user",
+    viewer: "/user"
+
+};
 
 
 
@@ -30,31 +71,46 @@ password
 ){
 
 
-
-/*
-
-Firebase Auth nanti
-
-*/
+const authUser =
+await firebaseLogin(email, password);
 
 
-const user={
+const profileSnap =
+await getById(COLLECTION.USERS, authUser.uid);
 
 
-email,
+if (!profileSnap.exists()) {
+
+    await firebaseLogout();
+
+    throw new Error(
+        "Akun ini belum terdaftar sebagai user aplikasi. Hubungi admin."
+    );
+
+}
 
 
-role:"ADMIN_SARPRAS"
+const profile =
+profileSnap.data();
 
+
+const user = {
+
+    uid: authUser.uid,
+    email: authUser.email,
+    role: profile.role,
+    name: profile.name || authUser.email
 
 };
 
 
-
-
+setUser(user);
 
 saveSession(user);
 
+
+window.location.href =
+ROLE_REDIRECT[user.role] || "/user";
 
 
 return user;
@@ -65,27 +121,17 @@ return user;
 
 
 
+export async function logout(){
 
 
-export function logout(){
+await firebaseLogout();
 
-
+logoutUser();
 
 clearSession();
 
 
-location.href="/login";
+window.location.href = "/login";
 
 
 }
-login(email,password)
-
-logout()
-
-register()
-
-forgotPassword()
-
-refreshSession()
-
-getCurrentUser()

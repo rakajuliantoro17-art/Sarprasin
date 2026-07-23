@@ -9,30 +9,6 @@ AUTH SERVICE
 
 import {
 
-login as firebaseLogin,
-
-logout as firebaseLogout,
-
-getById,
-
-COLLECTION
-
-}
-
-from "../firebase/index.js";
-
-import {
-
-setUser,
-
-logoutUser
-
-}
-
-from "../../store/auth.store.js";
-
-import {
-
 saveSession,
 
 clearSession
@@ -41,23 +17,6 @@ clearSession
 
 from "./session.service.js";
 
-
-
-// Kemana user diarahkan setelah login, berdasarkan role.
-// Sesuai pemetaan 4 dashboard (lihat src/router/routes.js).
-const ROLE_REDIRECT = {
-
-    admin: "/admin",
-    waka_sarpras: "/admin",
-    staff: "/admin",
-    arsiparis: "/admin",
-
-    operator: "/user",
-    guru: "/user",
-    wali_kelas: "/user",
-    viewer: "/user"
-
-};
 
 
 
@@ -71,46 +30,31 @@ password
 ){
 
 
-const authUser =
-await firebaseLogin(email, password);
+
+/*
+
+Firebase Auth nanti
+
+*/
 
 
-const profileSnap =
-await getById(COLLECTION.USERS, authUser.uid);
+const user={
 
 
-if (!profileSnap.exists()) {
-
-    await firebaseLogout();
-
-    throw new Error(
-        "Akun ini belum terdaftar sebagai user aplikasi. Hubungi admin."
-    );
-
-}
+email,
 
 
-const profile =
-profileSnap.data();
+role:"ADMIN_SARPRAS"
 
-
-const user = {
-
-    uid: authUser.uid,
-    email: authUser.email,
-    role: profile.role,
-    name: profile.name || authUser.email
 
 };
 
 
-setUser(user);
+
+
 
 saveSession(user);
 
-
-window.location.href =
-ROLE_REDIRECT[user.role] || "/user";
 
 
 return user;
@@ -121,17 +65,31 @@ return user;
 
 
 
-export async function logout(){
 
 
-await firebaseLogout();
+export function logout(){
 
-logoutUser();
+
 
 clearSession();
 
 
-window.location.href = "/login";
+location.href="/login";
 
 
 }
+
+/*
+==================================================
+Catatan fungsi yang tersedia di service ini
+(dokumentasi saja — dipanggil dari kode lain,
+BUKAN dieksekusi langsung di file ini):
+
+    login(email, password)
+    logout()
+    register()
+    forgotPassword()
+    refreshSession()
+    getCurrentUser()
+==================================================
+*/

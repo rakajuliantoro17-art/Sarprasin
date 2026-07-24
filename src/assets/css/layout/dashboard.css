@@ -677,3 +677,39 @@ Version : 1.0.0
 
 
 }
+
+
+/* ======================================================
+   STAT CARD INNER CONTENT
+====================================================== */
+
+
+.dashboard-stat .stat-icon {
+
+    font-size:1.8rem;
+
+    margin-bottom:8px;
+
+}
+
+
+.dashboard-stat span {
+
+    display:block;
+
+    font-size:.85rem;
+
+    color:rgba(255,255,255,.7);
+
+}
+
+
+.dashboard-stat h2 {
+
+    margin:4px 0 0;
+
+    font-size:1.8rem;
+
+    color:white;
+
+}

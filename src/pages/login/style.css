@@ -288,6 +288,27 @@ font-size:.9rem;
 }
 
 
+.login-message.success {
+
+color:#86efac;
+
+}
+
+
+.login-message.error {
+
+color:#fca5a5;
+
+}
+
+
+.login-message.warning {
+
+color:#fde68a;
+
+}
+
+
 
 .login-footer {
 

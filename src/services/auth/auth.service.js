@@ -11,7 +11,9 @@ import {
 
 saveSession,
 
-clearSession
+clearSession,
+
+getSession
 
 }
 
@@ -79,17 +81,22 @@ location.href="/login";
 
 }
 
+
+export function getCurrentUser(){
+
+
+    return getSession();
+
+
+}
+
 /*
 ==================================================
-Catatan fungsi yang tersedia di service ini
-(dokumentasi saja — dipanggil dari kode lain,
-BUKAN dieksekusi langsung di file ini):
+Catatan fungsi lain yang direncanakan untuk service
+ini (belum diimplementasikan, dokumentasi saja):
 
-    login(email, password)
-    logout()
-    register()
-    forgotPassword()
+    register(email, password)
+    forgotPassword(email)
     refreshSession()
-    getCurrentUser()
 ==================================================
 */

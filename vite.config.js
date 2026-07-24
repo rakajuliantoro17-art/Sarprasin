@@ -24,12 +24,12 @@ export default defineConfig({
             input: {
 
                 main: resolve(__dirname, "index.html"),
-                login: resolve(__dirname, "src/pages/login/index.html")
+                login: resolve(__dirname, "src/pages/login/index.html"),
+                admin: resolve(__dirname, "src/pages/admin/index.html")
 
-                // admin & user SEMENTARA dikeluarkan dari build:
-                // - src/pages/admin/index.html butuh "src/assets/js/pages/admin.js" (belum ada)
+                // user SEMENTARA masih dikeluarkan dari build:
                 // - src/pages/user/index.html butuh "/api-config.js" (belum ada)
-                // Tambahkan lagi ke sini setelah kedua file itu dibuat.
+                // Tambahkan lagi ke sini setelah file itu dibuat.
 
             }
 

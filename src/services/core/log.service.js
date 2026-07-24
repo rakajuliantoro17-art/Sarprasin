@@ -100,7 +100,7 @@ export async function getAssetLogs(kodeBarang) {
 
     return await getWhere(
 
-        COLLECTION.LOG,
+        COLLECTION.LOGS,
 
         "kodeBarang",
 
@@ -120,7 +120,7 @@ export async function getUserLogs(uid) {
 
     return await getWhere(
 
-        COLLECTION.LOG,
+        COLLECTION.LOGS,
 
         "uid",
 

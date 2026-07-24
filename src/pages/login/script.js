@@ -92,6 +92,13 @@ async function handleLogin(event) {
 
         await login(email, password);
 
+        setMessage(
+            "Berhasil masuk. Mengalihkan...",
+            "success"
+        );
+
+        location.href = "/src/pages/admin/index.html";
+
     }
 
     catch (error) {

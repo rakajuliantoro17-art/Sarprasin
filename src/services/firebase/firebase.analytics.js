@@ -2,7 +2,9 @@ import {
 
     getAnalytics,
 
-    isSupported
+    isSupported,
+
+    logEvent
 
 }
 
@@ -23,5 +25,23 @@ export async function initializeAnalytics() {
     }
 
     return analytics;
+
+}
+
+export const EVENTS = {
+
+    CREATE_ASSET: "create_asset",
+    UPDATE_ASSET: "update_asset",
+    DELETE_ASSET: "delete_asset",
+    LOGIN: "login",
+    LOGOUT: "logout"
+
+};
+
+export function trackEvent(eventName, params = {}) {
+
+    if (!analytics) return;
+
+    logEvent(analytics, eventName, params);
 
 }

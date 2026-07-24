@@ -31,7 +31,13 @@ import {
     ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject
 } from "./firebase.storage.js";
 
-export { app, auth, db, storage };
+import {
+    trackEvent,
+    EVENTS,
+    initializeAnalytics
+} from "./firebase.analytics.js";
+
+export { app, auth, db, storage, trackEvent, EVENTS, initializeAnalytics };
 
 
 // ======================================================

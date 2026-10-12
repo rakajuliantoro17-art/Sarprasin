@@ -1,250 +1,70 @@
 /*
 ==========================================================
-SARPRASIN v2.0
-DASHBOARD ADMIN CONTROLLER
+SARPRASIN v2.0 - Dashboard Admin
 File : src/assets/js/pages/admin.js
 ==========================================================
 */
 
+import { getAll, COLLECTION } from "../../../services/firebase/index.js";
 import {
-    authListener,
-    getById,
-    getAll,
-    COLLECTION
-} from "../../../services/firebase/index.js";
+    initAdminPage, setText, toRows, escapeHtml, formatTimestamp
+} from "../shared/admin-shell.js";
 
-import { getAssets } from "../../../services/core/asset.service.js";
-import { getLogs } from "../../../services/core/log.service.js";
-import { logout } from "../../../services/auth/auth.service.js";
+initAdminPage({
+    key: "dashboard",
+    title: "Dashboard",
+    onReady: async () => {
 
-const ALLOWED_ROLES = ["admin", "waka_sarpras", "staff", "arsiparis"];
+        setText("dashboardDate", new Date().toLocaleDateString("id-ID", {
+            weekday: "long", day: "numeric", month: "long", year: "numeric"
+        }));
 
-export function initAdminDashboard() {
-
-    // Halaman ini tidak lewat bootstrap.js, jadi cek sesi
-    // Firebase-nya sendiri di sini.
-    authListener(async (authUser) => {
-
-        if (!authUser) {
-            window.location.href = "/login";
-            return;
-        }
-
-        const profileSnap = await getById(COLLECTION.USERS, authUser.uid);
-        const role = profileSnap.exists() ? profileSnap.data().role : null;
-
-        if (!ALLOWED_ROLES.includes(role)) {
-            window.location.href = "/login";
-            return;
-        }
-
-        const name = profileSnap.data().name || authUser.email;
-
-        renderUserInfo(name, role);
-        bindLogout();
-        bindSidebarToggle();
-        bindThemeToggle();
-        renderDate();
+        setText("totalReport", 4);
+        setText("systemStatus", navigator.onLine ? "Online" : "Offline");
 
         await Promise.all([
-            renderAssetStats(),
-            renderRoomStat(),
-            renderMaintenanceStat(),
-            renderReportStat(),
-            renderActivityTable(),
-            renderSystemStatus()
+            count("totalAsset", COLLECTION.ASSETS),
+            count("totalRoom", COLLECTION.ROOMS),
+            count("totalMaintenance", COLLECTION.MAINTENANCE),
+            renderActivity()
         ]);
-
-    });
-
-}
-
-function renderUserInfo(name, role) {
-
-    setText("sidebarUserName", name);
-    setText("sidebarUserRole", role);
-    setText("topbarUserName", name);
-    setText("topbarUserRole", role);
-
-}
-
-function bindLogout() {
-
-    const button = document.getElementById("logoutButton");
-    if (button) button.addEventListener("click", logout);
-
-}
-
-function bindSidebarToggle() {
-
-    const toggle = document.getElementById("sidebarToggle");
-    const sidebar = document.getElementById("sidebar");
-
-    if (toggle && sidebar) {
-        toggle.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-        });
     }
+});
 
-}
-
-function bindThemeToggle() {
-
-    const toggle = document.getElementById("themeToggle");
-    if (!toggle) return;
-
-    const saved = localStorage.getItem("sarprasin_theme") || "light";
-    document.documentElement.setAttribute("data-theme", saved);
-
-    toggle.addEventListener("click", () => {
-
-        const current = document.documentElement.getAttribute("data-theme");
-        const next = current === "dark" ? "light" : "dark";
-
-        document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("sarprasin_theme", next);
-
-    });
-
-}
-
-function renderDate() {
-
-    setText(
-        "dashboardDate",
-        new Date().toLocaleDateString("id-ID", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        })
-    );
-
-}
-
-async function renderAssetStats() {
-
+async function count(id, collectionName) {
     try {
-
-        const assets = await getAssets();
-
-        setText("totalAsset", assets.length);
-
-        const needAttention = assets.filter(
-            (a) => a.kondisi === "PERBAIKAN" || a.kondisi === "RUSAK"
-        ).length;
-
-        setText("maintenanceBadge", needAttention);
-
+        setText(id, (await getAll(collectionName)).size);
     } catch (error) {
-
-        console.error("Gagal ambil data aset:", error);
-        setText("totalAsset", "-");
-
+        console.warn("Gagal hitung", collectionName, error.message);
+        setText(id, "-");
     }
-
 }
 
-async function renderRoomStat() {
+async function renderActivity() {
+
+    const tbody = document.getElementById("activityTable");
 
     try {
+        const logs = toRows(await getAll(COLLECTION.LOGS))
+            .sort((a, b) => toMs(b.timestamp) - toMs(a.timestamp))
+            .slice(0, 10);
 
-        const snapshot = await getAll(COLLECTION.ROOMS);
-        setText("totalRoom", snapshot.size);
-
-    } catch (error) {
-
-        console.error("Gagal ambil data ruang:", error);
-        setText("totalRoom", "-");
-
-    }
-
-}
-
-async function renderMaintenanceStat() {
-
-    try {
-
-        const snapshot = await getAll(COLLECTION.MAINTENANCE);
-        setText("totalMaintenance", snapshot.size);
-
-    } catch (error) {
-
-        console.warn("Data maintenance belum tersedia:", error.message);
-        setText("totalMaintenance", 0);
-
-    }
-
-}
-
-function renderReportStat() {
-
-    const AVAILABLE_REPORT_TYPES = 4; // inventaris, ruang, keuangan, eksekutif
-    setText("totalReport", AVAILABLE_REPORT_TYPES);
-
-}
-
-async function renderActivityTable() {
-
-    const table = document.getElementById("activityTable");
-    if (!table) return;
-
-    const tbody = table.querySelector("tbody") || table;
-
-    try {
-
-        const logs = await getLogs();
-
-        if (!logs.length) {
-            tbody.innerHTML = `<tr><td colspan="4">Belum ada aktivitas tercatat.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = logs
-            .slice(0, 10)
-            .map((log) => `
+        tbody.innerHTML = logs.length
+            ? logs.map((l) => `
                 <tr>
-                    <td>${log.action || "-"}</td>
-                    <td>${log.description || "-"}</td>
-                    <td>${log.email || "-"}</td>
-                    <td>${formatTimestamp(log.timestamp)}</td>
-                </tr>
-            `)
-            .join("");
+                    <td>${escapeHtml(l.email)}</td>
+                    <td>${escapeHtml(l.action)}${l.description ? " - " + escapeHtml(l.description) : ""}</td>
+                    <td>${formatTimestamp(l.timestamp)}</td>
+                </tr>`).join("")
+            : '<tr><td colspan="3" class="page-empty">Belum ada aktivitas tercatat.</td></tr>';
 
     } catch (error) {
-
         console.error("Gagal ambil log aktivitas:", error);
-        tbody.innerHTML = `<tr><td colspan="4">Gagal memuat aktivitas.</td></tr>`;
-
+        tbody.innerHTML = '<tr><td colspan="3" class="page-empty">Gagal memuat aktivitas.</td></tr>';
     }
-
 }
 
-async function renderSystemStatus() {
-
-    setText(
-        "systemStatus",
-        navigator.onLine ? "Online" : "Offline"
-    );
-
+function toMs(ts) {
+    if (!ts) return 0;
+    return ts.toDate ? ts.toDate().getTime() : new Date(ts).getTime();
 }
-
-function formatTimestamp(timestamp) {
-
-    if (!timestamp) return "-";
-
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-
-    return date.toLocaleString("id-ID");
-
-}
-
-function setText(id, value) {
-
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-
-}
-
-initAdminDashboard();

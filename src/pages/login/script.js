@@ -90,14 +90,16 @@ async function handleLogin(event) {
         ======================================================
         */
 
-        await login(email, password);
+        const user = await login(email, password);
 
         setMessage(
             "Berhasil masuk. Mengalihkan...",
             "success"
         );
 
-        location.href = "/src/pages/admin/index.html";
+        // login() sudah redirect sesuai role; ini cadangan kalau belum
+        const ADMIN_ROLES = ["admin", "waka_sarpras", "staff", "arsiparis"];
+        location.href = ADMIN_ROLES.includes(user?.role) ? "/admin" : "/user";
 
     }
 

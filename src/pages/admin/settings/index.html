@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | SARPRASIN</title>
+    <link rel="icon" href="/logo/icon.png">
+    <link rel="stylesheet" href="/src/assets/css/app.css">
+</head>
+<body>
+
+    <div class="shell-loading" id="shellLoading">Memeriksa sesi login...</div>
+
+    <!-- Isi halaman. Disembunyikan sampai login admin terverifikasi,
+         lalu dipindahkan ke dalam layout sidebar oleh admin-shell.js -->
+    <div id="pageContent" hidden>
+        <div class="dashboard-title">
+            <h2>Settings</h2>
+            <span>Pengaturan akun &amp; sistem</span>
+        </div>
+        <div class="dashboard-panel glass">
+            <p>Nama: <strong id="setName">-</strong></p>
+            <p>Role: <strong id="setRole">-</strong></p>
+            <p>Versi aplikasi: <strong>SARPRASIN 2.0</strong></p>
+            <p>Status koneksi: <strong id="setStatus">-</strong></p>
+        </div>
+    </div>
+
+    <script type="module" src="/src/assets/js/pages/admin-settings.js"></script>
+</body>
+</html>

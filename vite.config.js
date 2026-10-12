@@ -25,7 +25,13 @@ export default defineConfig({
 
                 main: resolve(__dirname, "index.html"),
                 login: resolve(__dirname, "src/pages/login/index.html"),
-                admin: resolve(__dirname, "src/pages/admin/index.html")
+                admin: resolve(__dirname, "src/pages/admin/index.html"),
+                adminAsset: resolve(__dirname, "src/pages/admin/asset/index.html"),
+                adminRuangan: resolve(__dirname, "src/pages/admin/ruangan/index.html"),
+                adminMaintenance: resolve(__dirname, "src/pages/admin/maintenance/index.html"),
+                adminLaporan: resolve(__dirname, "src/pages/admin/laporan/index.html"),
+                adminUsers: resolve(__dirname, "src/pages/admin/users/index.html"),
+                adminSettings: resolve(__dirname, "src/pages/admin/settings/index.html")
 
                 // user SEMENTARA masih dikeluarkan dari build:
                 // - src/pages/user/index.html butuh "/api-config.js" (belum ada)

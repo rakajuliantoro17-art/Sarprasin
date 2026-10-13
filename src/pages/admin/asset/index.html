@@ -16,18 +16,24 @@
     <div id="pageContent" hidden>
         <div class="dashboard-title">
             <h2>Asset</h2>
-            <span>Data inventaris sarana & prasarana</span>
+            <span>Inventaris sarana &amp; prasarana per ruangan</span>
         </div>
 
         <div class="dashboard-panel glass">
             <div class="page-toolbar">
-                <input type="search" id="searchInput" placeholder="Cari...">
-                <span id="rowCount"></span>
+                <input type="search" id="searchInput" placeholder="Cari nama / kode barang...">
+                <select id="roomFilter"><option value="">Semua ruangan</option></select>
+                <a class="btn-ghost" id="kirBtn" href="/admin/kir">🖨️ Cetak KIR</a>
+                <button type="button" class="btn-primary" id="addBtn">➕ Tambah Asset</button>
             </div>
+            <div class="page-toolbar"><span id="rowCount"></span></div>
             <div class="table-wrap">
                 <table class="table dashboard-table">
-                    <thead><tr><th>Kode</th><th>Nama Barang</th><th>Ruang</th><th>Kondisi</th><th>Tahun</th><th>Nilai</th></tr></thead>
-                    <tbody id="dataTable"><tr><td colspan="6" class="page-empty">Memuat data...</td></tr></tbody>
+                    <thead><tr>
+                        <th>Kode</th><th>Nama Barang</th><th>Merk/Model</th><th>Ruang</th>
+                        <th>Jml</th><th>Kondisi</th><th>Tahun</th><th>Nilai</th><th>Aksi</th>
+                    </tr></thead>
+                    <tbody id="dataTable"><tr><td colspan="9" class="page-empty">Memuat data...</td></tr></tbody>
                 </table>
             </div>
         </div>

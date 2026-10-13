@@ -39,6 +39,10 @@
     {
       "source": "/admin/settings",
       "destination": "/src/pages/admin/settings/index.html"
+    },
+    {
+      "source": "/admin/kir",
+      "destination": "/src/pages/admin/kir/index.html"
     }
   ],
 

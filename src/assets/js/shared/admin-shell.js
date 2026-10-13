@@ -30,6 +30,7 @@ export const MENU = [
     { key: "ruangan",     icon: "🏫", text: "Ruangan",         href: "/admin/ruangan",     roles: ALL_ADMIN },
     { key: "maintenance", icon: "🔧", text: "Maintenance",     href: "/admin/maintenance", roles: ["admin", "waka_sarpras", "staff"], badge: true },
     { key: "laporan",     icon: "📄", text: "Laporan",         href: "/admin/laporan",     roles: ["admin", "waka_sarpras", "arsiparis"] },
+    { key: "kir",         icon: "🖨️", text: "KIR",             href: "/admin/kir",         roles: ALL_ADMIN, hidden: true },
     { section: "Sistem" },
     { key: "users",       icon: "👥", text: "User Management", href: "/admin/users",       roles: ["admin"] },
     { key: "settings",    icon: "⚙️", text: "Settings",        href: "/admin/settings",    roles: ["admin"] }
@@ -120,7 +121,7 @@ function toggleTheme() {
 
 function menuHtml(role, activeKey) {
     return MENU
-        .filter((m) => m.section || m.roles.includes(role))
+        .filter((m) => !m.hidden && (m.section || m.roles.includes(role)))
         .map((m) => {
             if (m.section) return `<div class="sidebar-menu-title">${m.section}</div>`;
             const active = m.key === activeKey ? " active" : "";
@@ -241,10 +242,11 @@ function bindShellEvents() {
 /**
  * @param {object}   opts
  * @param {string}   opts.key      key menu halaman ini (mis. "asset")
+ * @param {string}   opts.activeKey (opsional) menu yang di-highlight kalau beda dari key
  * @param {string}   opts.title    judul untuk breadcrumb & <title>
  * @param {Function} opts.onReady  dipanggil setelah shell siap: onReady({role,name,uid})
  */
-export function initAdminPage({ key, title, onReady }) {
+export function initAdminPage({ key, title, activeKey, onReady }) {
 
     applyTheme();
 
@@ -286,7 +288,7 @@ export function initAdminPage({ key, title, onReady }) {
         const name = profile.name || authUser.email;
 
         document.title = `${title} | SARPRASIN`;
-        buildShell({ role, name, activeKey: key, title });
+        buildShell({ role, name, activeKey: activeKey || key, title });
         bindShellEvents();
         applyTheme();
 
@@ -308,7 +310,7 @@ async function refreshMaintenanceBadge() {
     if (!badge) return;
     try {
         const rows = toRows(await getAll(COLLECTION.ASSETS));
-        const n = rows.filter((a) => ["PERBAIKAN", "RUSAK"].includes(String(a.kondisi || a.kodeKondisi || "").toUpperCase())).length;
+        const n = rows.filter((a) => /^(PERBAIKAN|RUSAK)/.test(String(a.kodeKondisi || a.kondisi || "").toUpperCase())).length;
         badge.textContent = n;
     } catch { badge.textContent = "0"; }
 }

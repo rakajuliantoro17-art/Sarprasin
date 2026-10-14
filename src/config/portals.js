@@ -40,7 +40,7 @@ export const PORTALS = {
 
     public: {
         label: "Portal Publik",
-        path: "/publik",
+        path: "/",
         icon: "🌐",
         desc: "Ringkasan sarana-prasarana sekolah untuk masyarakat, wali murid, dan alumni. Tanpa login.",
         who: "Masyarakat, Wali Murid, Alumni",

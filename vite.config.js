@@ -34,8 +34,7 @@ export default defineConfig({
                 adminSettings: resolve(__dirname, "src/pages/admin/settings/index.html"),
                 adminKir: resolve(__dirname, "src/pages/admin/kir/index.html"),
                 executive: resolve(__dirname, "src/pages/executive/index.html"),
-                user: resolve(__dirname, "src/pages/user/index.html"),
-                publik: resolve(__dirname, "src/pages/public/index.html")
+                user: resolve(__dirname, "src/pages/user/index.html")
 
 
             }

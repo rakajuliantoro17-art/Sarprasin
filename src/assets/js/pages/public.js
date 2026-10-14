@@ -1,6 +1,6 @@
 /*
 ==========================================================
-SARPRASIN v2.0 - Portal Publik (tanpa login)
+SARPRASIN v2.0 - Beranda Publik (tanpa login) di /
 File : src/assets/js/pages/public.js
 
 Hanya membaca SATU dokumen agregat: publicSummary/latest
@@ -9,7 +9,8 @@ Tidak ada data per barang / per orang yang terbuka.
 ==========================================================
 */
 
-import { getById } from "../../../services/firebase/index.js";
+import { getById, authListener, COLLECTION } from "../../../services/firebase/index.js";
+import { roleLabel, defaultPath } from "../../../config/portals.js";
 
 const set = (id, v) => { document.getElementById(id).textContent = v; };
 
@@ -41,3 +42,23 @@ const set = (id, v) => { document.getElementById(id).textContent = v; };
         set("note", "Ringkasan publik belum tersedia saat ini.");
     }
 })();
+
+/* Pengunjung yang sudah login: badge berubah jadi pintasan ke portalnya */
+authListener(async (user) => {
+    if (!user) return;
+    try {
+        const snap = await getById(COLLECTION.USERS, user.uid);
+        if (!snap.exists()) return;
+        const { role } = snap.data();
+        const home = defaultPath(role);
+        if (!home) return;
+        const label = `Ke Portal ${roleLabel(role)}`;
+        document.querySelector("#fab span").textContent = label;
+        document.getElementById("fab").href = home;
+        const btn = document.getElementById("authBtn");
+        btn.textContent = label;
+        btn.href = home;
+    } catch (error) {
+        console.warn("Cek sesi dilewati:", error.message);
+    }
+});

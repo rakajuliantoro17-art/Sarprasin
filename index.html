@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SARPRASIN - Sistem Manajemen Sarana dan Prasarana SMAN 1 Sooko Mojokerto">
+    <meta name="description" content="Ringkasan kondisi sarana dan prasarana SMAN 1 Sooko">
     <meta name="theme-color" content="#0F172A">
     <title>SARPRASIN | SMAN 1 Sooko</title>
     <link rel="icon" href="/logo/icon.png">
@@ -17,37 +17,37 @@
             <span>SARPRASIN<small>SMAN 1 Sooko</small></span>
         </a>
         <nav class="pt-links">
-            <a href="#portal" class="pt-hide-sm">Portal</a>
-            <a href="/publik">Ringkasan Publik</a>
             <a href="/login" class="pt-cta" id="authBtn">Masuk</a>
         </nav>
     </header>
 
-    <main>
-        <section class="pt-hero">
-            <div class="pt-wrap">
-                <h1>Sistem Sarana &amp; Prasarana<br>SMAN 1 Sooko</h1>
-                <p>Pendataan aset sekolah yang rapi dan transparan: dari Kartu Inventaris Ruangan sampai laporan kondisi untuk pimpinan.</p>
-                <div class="pt-hero-actions">
-                    <a class="btn-primary pt-btn" href="/login" id="heroBtn">Masuk ke Sistem</a>
-                    <a class="btn-ghost pt-btn" href="/publik">Lihat Ringkasan Publik</a>
-                </div>
-            </div>
-        </section>
+    <main class="pt-section">
+        <div class="pt-wrap">
+            <h2>Sarana &amp; Prasarana SMAN 1 Sooko</h2>
+            <p>Ringkasan kondisi sarana dan prasarana SMAN 1 Sooko untuk masyarakat, wali murid, dan alumni.</p>
 
-        <section class="pt-section" id="portal">
-            <div class="pt-wrap">
-                <h2>Pilih Portal</h2>
-                <p id="portalHint">Portal ditentukan oleh jenis akun Anda. Setelah masuk, Anda diarahkan otomatis.</p>
-                <div class="pt-grid" id="portalGrid"></div>
+            <div class="pt-kpi" id="kpi">
+                <div><strong id="kBarang">-</strong><span>Total Barang</span></div>
+                <div><strong id="kRuang">-</strong><span>Ruangan</span></div>
+                <div><strong id="kBaik">-</strong><span>Kondisi Baik</span></div>
+                <div><strong id="kRusak">-</strong><span>Perlu Perbaikan</span></div>
             </div>
-        </section>
+
+            <div style="margin-top:22px">
+                <strong>Tingkat kondisi baik</strong>
+                <div class="pt-bar"><i id="barBaik" style="width:0%"></i></div>
+                <span id="barLabel" class="pt-note"></span>
+            </div>
+
+            <p class="pt-note" id="note">Memuat ringkasan...</p>
+        </div>
     </main>
 
-    <footer class="pt-footer">
-        © SMAN 1 Sooko, Mojokerto — SARPRASIN 2.0
-    </footer>
+    <!-- Badge melayang: pintu masuk petugas (admin, eksekutif, guru) -->
+    <a class="pt-fab" id="fab" href="/login">🔐 <span>Masuk Petugas</span></a>
 
-    <script type="module" src="/src/assets/js/pages/landing.js"></script>
+    <footer class="pt-footer">© SMAN 1 Sooko, Mojokerto — SARPRASIN 2.0</footer>
+
+    <script type="module" src="/src/assets/js/pages/public.js"></script>
 </body>
 </html>

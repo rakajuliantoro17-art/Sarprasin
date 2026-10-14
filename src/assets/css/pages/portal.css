@@ -110,6 +110,26 @@ Responsif: dirancang mobile-first karena diakses lewat HP.
 
 .btn-primary.pt-btn, .btn-ghost.pt-btn { padding: 12px 22px; }
 
+/* Badge melayang pintu masuk petugas */
+.pt-fab {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 60;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+    transition: transform .2s, background .2s;
+}
+.pt-fab:hover { background: #1d4ed8; transform: translateY(-2px); }
+
 @media (max-width: 640px) {
     .pt-nav { padding: 10px 14px; gap: 8px; }
     .pt-links { flex-wrap: nowrap; }

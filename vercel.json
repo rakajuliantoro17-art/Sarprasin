@@ -3,6 +3,14 @@
 
    "trailingSlash": false,
 
+  "redirects": [
+    {
+      "source": "/publik",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+
   "rewrites": [
     {
       "source": "/",
@@ -47,10 +55,6 @@
     {
       "source": "/user",
       "destination": "/src/pages/user/index.html"
-    },
-    {
-      "source": "/publik",
-      "destination": "/src/pages/public/index.html"
     },
     {
       "source": "/admin/kir",

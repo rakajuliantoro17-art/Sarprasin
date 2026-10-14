@@ -7,6 +7,7 @@ AUTH SERVICE
 */
 
 
+import { defaultPath, safeNext } from "../../config/portals.js";
 import {
 
 login as firebaseLogin,
@@ -45,21 +46,7 @@ from "./session.service.js";
 
 
 
-// Kemana user diarahkan setelah login, berdasarkan role.
-// Sesuai pemetaan 4 dashboard (lihat src/router/routes.js).
-const ROLE_REDIRECT = {
 
-    admin: "/admin",
-    waka_sarpras: "/admin",
-    staff: "/admin",
-    arsiparis: "/admin",
-
-    operator: "/user",
-    guru: "/user",
-    wali_kelas: "/user",
-    viewer: "/user"
-
-};
 
 
 
@@ -111,8 +98,13 @@ setUser(user);
 saveSession(user);
 
 
+const next = safeNext(
+    new URLSearchParams(window.location.search).get("next"),
+    user.role
+);
+
 window.location.href =
-ROLE_REDIRECT[user.role] || "/user";
+next || defaultPath(user.role) || "/";
 
 
 return user;

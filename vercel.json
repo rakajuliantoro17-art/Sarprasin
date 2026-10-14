@@ -41,6 +41,18 @@
       "destination": "/src/pages/admin/settings/index.html"
     },
     {
+      "source": "/eksekutif",
+      "destination": "/src/pages/executive/index.html"
+    },
+    {
+      "source": "/user",
+      "destination": "/src/pages/user/index.html"
+    },
+    {
+      "source": "/publik",
+      "destination": "/src/pages/public/index.html"
+    },
+    {
       "source": "/admin/kir",
       "destination": "/src/pages/admin/kir/index.html"
     }

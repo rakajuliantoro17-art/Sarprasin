@@ -90,16 +90,15 @@ async function handleLogin(event) {
         ======================================================
         */
 
-        const user = await login(email, password);
+        await login(email, password);
 
         setMessage(
             "Berhasil masuk. Mengalihkan...",
             "success"
         );
 
-        // login() sudah redirect sesuai role; ini cadangan kalau belum
-        const ADMIN_ROLES = ["admin", "waka_sarpras", "staff", "arsiparis"];
-        location.href = ADMIN_ROLES.includes(user?.role) ? "/admin" : "/user";
+        // login() di auth.service sudah mengarahkan ke portal sesuai role
+        // (atau ke ?next= bila diizinkan), jadi tidak ada redirect lagi di sini.
 
     }
 

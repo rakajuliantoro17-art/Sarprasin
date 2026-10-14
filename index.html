@@ -1,99 +1,53 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <meta
-        name="description"
-        content="SARPRASIN - Smart School Asset Management System SMAN 1 Sooko Mojokerto">
-
-    <meta
-        name="theme-color"
-        content="#0F172A">
-
-    <meta
-        name="color-scheme"
-        content="light dark">
-
-    <title>
-        SARPRASIN v2.1.0 | Smart School Asset Management
-    </title>
-
-    <!-- ======================================================
-         Favicon
-    ======================================================= -->
-
-    <link
-        rel="icon"
-        href="/logo/icon.png">
-
-    <!-- ======================================================
-         Fonts
-    ======================================================= -->
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <!-- ======================================================
-         Global CSS
-         (app.css meng-@import semua modul: base, layout,
-         components, pages, themes, responsive)
-    ======================================================= -->
-
-    <link
-        rel="stylesheet"
-        href="/src/assets/css/app.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SARPRASIN - Sistem Manajemen Sarana dan Prasarana SMAN 1 Sooko Mojokerto">
+    <meta name="theme-color" content="#0F172A">
+    <title>SARPRASIN | SMAN 1 Sooko</title>
+    <link rel="icon" href="/logo/icon.png">
+    <link rel="stylesheet" href="/src/assets/css/app.css">
 </head>
+<body class="pt-body">
 
-<body>
+    <header class="pt-nav">
+        <a class="pt-brand" href="/">
+            <img src="/logo/icon.png" alt="">
+            <span>SARPRASIN<small>SMAN 1 Sooko</small></span>
+        </a>
+        <nav class="pt-links">
+            <a href="#portal" class="pt-hide-sm">Portal</a>
+            <a href="/publik">Ringkasan Publik</a>
+            <a href="/login" class="pt-cta" id="authBtn">Masuk</a>
+        </nav>
+    </header>
 
-    <!-- ======================================================
-         Application Root
-    ======================================================= -->
+    <main>
+        <section class="pt-hero">
+            <div class="pt-wrap">
+                <h1>Sistem Sarana &amp; Prasarana<br>SMAN 1 Sooko</h1>
+                <p>Pendataan aset sekolah yang rapi dan transparan: dari Kartu Inventaris Ruangan sampai laporan kondisi untuk pimpinan.</p>
+                <div class="pt-hero-actions">
+                    <a class="btn-primary pt-btn" href="/login" id="heroBtn">Masuk ke Sistem</a>
+                    <a class="btn-ghost pt-btn" href="/publik">Lihat Ringkasan Publik</a>
+                </div>
+            </div>
+        </section>
 
-    <div id="app">
+        <section class="pt-section" id="portal">
+            <div class="pt-wrap">
+                <h2>Pilih Portal</h2>
+                <p id="portalHint">Portal ditentukan oleh jenis akun Anda. Setelah masuk, Anda diarahkan otomatis.</p>
+                <div class="pt-grid" id="portalGrid"></div>
+            </div>
+        </section>
+    </main>
 
-        <div id="app-loader" class="app-loader glass">
+    <footer class="pt-footer">
+        © SMAN 1 Sooko, Mojokerto — SARPRASIN 2.0
+    </footer>
 
-            <img
-                src="/logo/icon.png"
-                alt="SARPRASIN Logo"
-                class="loader-logo">
-
-            <h1>SARPRASIN</h1>
-
-            <p>
-                Smart School Asset Management
-            </p>
-
-            <div class="loader-spinner"></div>
-
-        </div>
-
-    </div>
-
-    <!-- ======================================================
-         Bootstrap Application
-    ======================================================= -->
-
-    <script
-        type="module"
-        src="/src/main.js">
-    </script>
-
+    <script type="module" src="/src/assets/js/pages/landing.js"></script>
 </body>
-
 </html>

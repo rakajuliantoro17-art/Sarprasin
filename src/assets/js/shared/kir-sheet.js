@@ -93,7 +93,7 @@ export function kirHtml(room, assets, { kepsekName = "", kepsekNip = "" } = {}) 
             </tfoot>
         </table>
 
-        <p class="kir-note">B = Baik, RR = Rusak Ringan, RB = Rusak Berat</p>
+        <p class="kir-note">B = Baik, RR = Rusak Ringan (Perlu Perbaikan), RB = Rusak Berat</p>
 
         <div class="kir-sign">
             <div>

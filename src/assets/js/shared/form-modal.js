@@ -11,7 +11,7 @@ openFormModal({
 
 fields: [{ name, label, type, required, options, placeholder,
            min, step, full, disabled }]
-type  : text | number | select | textarea
+type  : text | number | select | textarea | file (hasil: objek File atau null)
 ==========================================================
 */
 
@@ -30,6 +30,9 @@ function fieldHtml(f, value) {
                 `<option value="${escapeHtml(o.value)}"${String(o.value) === String(v) ? " selected" : ""}>${escapeHtml(o.label)}</option>`
             )).join("");
         input = `<select id="${id}" name="${f.name}"${req}${dis}>${opts}</select>`;
+    } else if (f.type === "file") {
+        const current = v ? `<small>Foto saat ini: <a href="${escapeHtml(v)}" target="_blank" rel="noopener">lihat</a> (pilih file baru untuk mengganti)</small>` : "";
+        input = `<input id="${id}" name="${f.name}" type="file" accept="${escapeHtml(f.accept || "image/*")}"${dis}>${current}`;
     } else if (f.type === "textarea") {
         input = `<textarea id="${id}" name="${f.name}" rows="3" placeholder="${escapeHtml(f.placeholder || "")}"${req}${dis}>${escapeHtml(v === "" ? "" : v)}</textarea>`;
     } else {
@@ -95,6 +98,7 @@ export function openFormModal({ title, fields, values = {}, submitText = "Simpan
         fields.forEach((f) => {
             const el = form.elements[f.name];
             if (!el) return;
+            if (f.type === "file") { data[f.name] = el.files?.[0] || null; return; }
             let val = el.value.trim();
             if (f.type === "number") val = val === "" ? null : Number(val);
             data[f.name] = val;

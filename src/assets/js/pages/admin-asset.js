@@ -12,6 +12,7 @@ import { openFormModal, confirmDialog } from "../shared/form-modal.js";
 import {
     KONDISI, SUMBER_DANA, labelOf, normalizeKondisi, loadRooms, loadAssets
 } from "../shared/inventory-data.js";
+import { uploadFile } from "../../../services/firebase/index.js";
 import {
     createAsset, updateAsset, deleteAsset
 } from "../../../services/core/asset.service.js";
@@ -49,7 +50,7 @@ async function refresh() {
     } catch (error) {
         console.error("Gagal memuat data:", error);
         document.getElementById("dataTable").innerHTML =
-            '<tr><td colspan="9" class="page-empty">Gagal memuat data (cek Firestore Rules).</td></tr>';
+            '<tr><td colspan="10" class="page-empty">Gagal memuat data (cek Firestore Rules).</td></tr>';
         return;
     }
 
@@ -83,6 +84,8 @@ function render() {
         { render: (r) => escapeHtml(labelOf(KONDISI, normalizeKondisi(r.kodeKondisi || r.kondisi))) },
         { render: (r) => escapeHtml(r.tahun) },
         { render: (r) => r.nilai != null && r.nilai !== "" ? "Rp " + Number(r.nilai).toLocaleString("id-ID") : "-" },
+        { render: (r) => (r.fotoUrl || r.foto)
+            ? `<a href="${escapeHtml(r.fotoUrl || r.foto)}" target="_blank" rel="noopener">📷</a>` : "-" },
         { render: (r) => `
             <button type="button" class="btn-mini" data-act="edit" data-id="${escapeHtml(r.id)}">Edit</button>
             <button type="button" class="btn-mini danger" data-act="del" data-id="${escapeHtml(r.id)}">Hapus</button>` }
@@ -139,7 +142,7 @@ function openForm(row = null) {
     openFormModal({
         title: editing ? "Edit Asset" : "Tambah Asset",
         values: editing
-            ? { ...row, kodeKondisi: normalizeKondisi(row.kodeKondisi || row.kondisi) }
+            ? { ...row, foto: row.fotoUrl, kodeKondisi: normalizeKondisi(row.kodeKondisi || row.kondisi) }
             : { kodeRuang: state.room, jumlah: 1, kodeKondisi: "BAIK", tahun: new Date().getFullYear() },
         fields: [
             { name: "namaBarang", label: "Nama Barang", required: true, full: true, placeholder: "mis. Meja Siswa" },
@@ -152,12 +155,23 @@ function openForm(row = null) {
             { name: "kodeSumber", label: "Sumber Dana", type: "select", required: true, options: SUMBER_DANA },
             { name: "tahun", label: "Tahun Pengadaan", type: "number", required: true, min: 1900, step: 1 },
             { name: "nilai", label: "Nilai Perolehan (Rp)", type: "number", min: 0, step: 1 },
+            { name: "foto", label: "Foto Barang (opsional, maks. 5 MB)", type: "file", full: true },
             { name: "keterangan", label: "Keterangan", type: "textarea", full: true }
         ],
         onSubmit: async (data) => {
 
+            const { foto, ...fields } = data;
+
+            let fotoUrl = editing ? (row.fotoUrl || "") : "";
+            if (foto) {
+                if (foto.size > 5 * 1024 * 1024) throw new Error("Ukuran foto maksimal 5 MB.");
+                const safe = foto.name.replace(/[^A-Za-z0-9._-]/g, "_");
+                fotoUrl = await uploadFile(`aset/${Date.now()}_${safe}`, foto);
+            }
+
             const payload = {
-                ...data,
+                ...fields,
+                fotoUrl,
                 kodeBarang: data.kodeBarang || (editing ? row.kodeBarang : "") || nextKode(data.kodeRuang),
                 jumlah: data.jumlah || 1,
                 nilai: data.nilai ?? 0,

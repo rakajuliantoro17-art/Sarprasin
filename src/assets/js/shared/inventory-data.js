@@ -12,15 +12,21 @@ mengisi koleksi master di Firestore dulu.
 import { getAll, COLLECTION } from "../../../services/firebase/index.js";
 import { toRows } from "./admin-shell.js";
 
-/* Standar KIR: B = Baik, RR = Rusak Ringan, RB = Rusak Berat */
+/* Pilihan mengikuti spreadsheet sekolah:
+   Baik / Perlu Perbaikan / Rusak Berat.
+   Untuk KIR: Perlu Perbaikan = Rusak Ringan (RR). */
 export const KONDISI = [
-    { value: "BAIK",         label: "Baik (B)",         short: "B"  },
-    { value: "RUSAK_RINGAN", label: "Rusak Ringan (RR)", short: "RR" },
-    { value: "RUSAK_BERAT",  label: "Rusak Berat (RB)",  short: "RB" }
+    { value: "BAIK",         label: "Baik",                          short: "B"  },
+    { value: "RUSAK_RINGAN", label: "Perlu Perbaikan (Rusak Ringan)", short: "RR" },
+    { value: "RUSAK_BERAT",  label: "Rusak Berat",                   short: "RB" }
 ];
 
+/* Kode sumber dana dari spreadsheet (BOSP, BOSK, BPPOP) + cadangan.
+   Mau menambah? Cukup tambah baris di sini. */
 export const SUMBER_DANA = [
-    { value: "BOS",     label: "BOS" },
+    { value: "BOSP",    label: "BOSP" },
+    { value: "BOSK",    label: "BOSK" },
+    { value: "BPPOP",   label: "BPPOP" },
     { value: "APBD",    label: "APBD" },
     { value: "APBN",    label: "APBN" },
     { value: "KOMITE",  label: "Komite / Sumbangan" },
@@ -50,12 +56,12 @@ export function labelOf(list, value) {
     return list.find((i) => i.value === value)?.label || value || "-";
 }
 
-/** Kondisi lama (data awal) -> kode baku */
+/** Teks kondisi apa pun (spreadsheet lama / kode lama) -> kode baku */
 export function normalizeKondisi(value) {
-    const v = String(value || "").toUpperCase();
+    const v = String(value || "").trim().toUpperCase().replace(/[\s-]+/g, "_");
     if (v === "BAIK" || v === "B") return "BAIK";
-    if (v === "RUSAK_RINGAN" || v === "RR" || v === "PERBAIKAN") return "RUSAK_RINGAN";
-    if (v === "RUSAK_BERAT" || v === "RB" || v === "RUSAK") return "RUSAK_BERAT";
+    if (["RUSAK_RINGAN", "RR", "PERBAIKAN", "PERLU_PERBAIKAN"].includes(v)) return "RUSAK_RINGAN";
+    if (["RUSAK_BERAT", "RB", "RUSAK"].includes(v)) return "RUSAK_BERAT";
     return "BAIK";
 }
 

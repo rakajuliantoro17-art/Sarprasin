@@ -12,6 +12,7 @@ openFormModal({
 fields: [{ name, label, type, required, options, placeholder,
            min, step, full, disabled }]
 type  : text | number | select | textarea | file (hasil: objek File atau null)
+        | checks (kotak centang banyak; options:[{value,label}]; hasil: array nilai)
 ==========================================================
 */
 
@@ -30,6 +31,13 @@ function fieldHtml(f, value) {
                 `<option value="${escapeHtml(o.value)}"${String(o.value) === String(v) ? " selected" : ""}>${escapeHtml(o.label)}</option>`
             )).join("");
         input = `<select id="${id}" name="${f.name}"${req}${dis}>${opts}</select>`;
+    } else if (f.type === "checks") {
+        const chosen = Array.isArray(value) ? value.map(String) : [];
+        input = `<div class="check-list">` + (f.options || []).map((o) => `
+            <label class="check-item">
+                <input type="checkbox" name="${f.name}" value="${escapeHtml(o.value)}"${chosen.includes(String(o.value)) ? " checked" : ""}${dis}>
+                <span>${escapeHtml(o.label)}</span>
+            </label>`).join("") + `</div>`;
     } else if (f.type === "file") {
         const current = v ? `<small>Foto saat ini: <a href="${escapeHtml(v)}" target="_blank" rel="noopener">lihat</a> (pilih file baru untuk mengganti)</small>` : "";
         input = `<input id="${id}" name="${f.name}" type="file" accept="${escapeHtml(f.accept || "image/*")}"${dis}>${current}`;
@@ -41,10 +49,10 @@ function fieldHtml(f, value) {
     }
 
     return `
-        <label class="form-field${f.full ? " full" : ""}" for="${id}">
+        <${f.type === "checks" ? "div" : "label"} class="form-field${f.full ? " full" : ""}"${f.type === "checks" ? "" : ` for="${id}"`}>
             <span>${escapeHtml(f.label)}${f.required ? " *" : ""}</span>
             ${input}
-        </label>`;
+        </${f.type === "checks" ? "div" : "label"}>`;
 }
 
 export function openFormModal({ title, fields, values = {}, submitText = "Simpan", onSubmit }) {
@@ -96,6 +104,10 @@ export function openFormModal({ title, fields, values = {}, submitText = "Simpan
 
         const data = {};
         fields.forEach((f) => {
+            if (f.type === "checks") {
+                data[f.name] = [...form.querySelectorAll(`input[name="${f.name}"]:checked`)].map((i) => i.value);
+                return;
+            }
             const el = form.elements[f.name];
             if (!el) return;
             if (f.type === "file") { data[f.name] = el.files?.[0] || null; return; }

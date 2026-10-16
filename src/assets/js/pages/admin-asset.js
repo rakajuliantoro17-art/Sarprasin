@@ -12,7 +12,7 @@ import { openFormModal, confirmDialog } from "../shared/form-modal.js";
 import {
     KONDISI, SUMBER_DANA, labelOf, normalizeKondisi, loadRooms, loadAssets
 } from "../shared/inventory-data.js";
-import { uploadFile } from "../../../services/firebase/index.js";
+import { uploadPhoto } from "../shared/photo.js";
 import {
     createAsset, updateAsset, deleteAsset
 } from "../../../services/core/asset.service.js";
@@ -163,11 +163,7 @@ function openForm(row = null) {
             const { foto, ...fields } = data;
 
             let fotoUrl = editing ? (row.fotoUrl || "") : "";
-            if (foto) {
-                if (foto.size > 5 * 1024 * 1024) throw new Error("Ukuran foto maksimal 5 MB.");
-                const safe = foto.name.replace(/[^A-Za-z0-9._-]/g, "_");
-                fotoUrl = await uploadFile(`aset/${Date.now()}_${safe}`, foto);
-            }
+            if (foto) fotoUrl = await uploadPhoto(foto);
 
             const payload = {
                 ...fields,

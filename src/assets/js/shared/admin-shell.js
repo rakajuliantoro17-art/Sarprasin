@@ -301,7 +301,7 @@ export function initPortalPage({ portal = "admin", key, title, activeKey, onRead
 
         const role = profile?.role;
 
-        if (!role) {
+        if (!role || profile.status === "nonaktif") {
             window.location.href = "/login";
             return;
         }
@@ -330,7 +330,7 @@ export function initPortalPage({ portal = "admin", key, title, activeKey, onRead
 
         if (onReady) {
             try {
-                await onReady({ role, name, uid: authUser.uid });
+                await onReady({ role, name, uid: authUser.uid, profile });
             } catch (error) {
                 console.error("Gagal memuat halaman:", error);
             }

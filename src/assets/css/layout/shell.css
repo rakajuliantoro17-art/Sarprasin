@@ -264,3 +264,18 @@ body.has-shell.sidebar-collapsed .dashboard-main { margin-left: 0; }
     .kir-table thead { display: table-header-group; }
     .kir-table tr { page-break-inside: avoid; }
 }
+
+/* Kotak centang banyak (mis. ruangan yang ditugaskan) */
+.check-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 6px 12px;
+    max-height: 180px;
+    overflow: auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, .25);
+    background: rgba(255, 255, 255, .08);
+}
+.check-item { display: flex; gap: 8px; align-items: center; font-size: .85rem; }
+.check-item input { width: auto; padding: 0; }

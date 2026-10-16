@@ -12,22 +12,44 @@
     <div class="shell-loading" id="shellLoading">Memeriksa sesi login...</div>
 
     <div id="pageContent" hidden>
+
         <div class="dashboard-title no-print">
             <h2>Inventaris Ruangan</h2>
-            <span>Pilih ruangan untuk melihat dan mencetak kartunya</span>
+            <span id="userHint">Ruangan yang menjadi tanggung jawab Anda</span>
         </div>
 
         <div class="dashboard-panel glass no-print">
             <div class="page-toolbar">
                 <select id="roomSelect"><option value="">- pilih ruangan -</option></select>
-                <button type="button" class="btn-primary" id="printBtn">🖨️ Cetak / Simpan PDF</button>
+                <button type="button" class="btn-primary" id="addBtn">➕ Tambah Barang</button>
+                <button type="button" class="btn-ghost" id="reportBtn">⚠️ Lapor Kerusakan</button>
+                <button type="button" class="btn-ghost" id="printBtn">🖨️ Cetak KIR</button>
             </div>
-            <p class="hint">Data hanya dapat dilihat. Perubahan data dilakukan oleh petugas sarpras.</p>
+            <p class="hint">Barang baru yang Anda tambahkan akan diperiksa admin. Nilai dan sumber dana diisi oleh admin.</p>
+            <div class="page-toolbar"><span id="rowCount"></span></div>
+            <div class="table-wrap">
+                <table class="table dashboard-table">
+                    <thead><tr>
+                        <th>Kode</th><th>Nama Barang</th><th>Merk/Model</th><th>Jml</th>
+                        <th>Kondisi</th><th>Foto</th><th>Status</th><th>Aksi</th>
+                    </tr></thead>
+                    <tbody id="dataTable"><tr><td colspan="8" class="page-empty">Memuat data...</td></tr></tbody>
+                </table>
+            </div>
         </div>
 
-        <div id="kirSheet" class="kir-sheet">
-            <p class="page-empty">Pilih ruangan untuk menampilkan kartu inventaris.</p>
+        <div class="dashboard-panel glass no-print">
+            <div class="dashboard-title"><h2 style="font-size:1.05rem">Laporan Kerusakan Saya</h2></div>
+            <div class="table-wrap">
+                <table class="table dashboard-table">
+                    <thead><tr><th>Tanggal</th><th>Barang</th><th>Keterangan</th><th>Status</th></tr></thead>
+                    <tbody id="reportTable"><tr><td colspan="4" class="page-empty">Belum ada laporan.</td></tr></tbody>
+                </table>
+            </div>
         </div>
+
+        <div id="kirSheet" class="kir-sheet"></div>
+
     </div>
 
     <script type="module" src="/src/assets/js/pages/user.js"></script>

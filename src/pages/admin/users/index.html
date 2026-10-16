@@ -16,18 +16,20 @@
     <div id="pageContent" hidden>
         <div class="dashboard-title">
             <h2>User Management</h2>
-            <span>Akun & role pengguna</span>
+            <span>Profil, role, dan penugasan ruangan</span>
         </div>
 
         <div class="dashboard-panel glass">
             <div class="page-toolbar">
-                <input type="search" id="searchInput" placeholder="Cari...">
-                <span id="rowCount"></span>
+                <input type="search" id="searchInput" placeholder="Cari nama / email / role...">
+                <button type="button" class="btn-primary" id="addBtn">➕ Tambah Profil User</button>
             </div>
+            <div class="page-toolbar"><span id="rowCount"></span></div>
+            <p class="hint">Langkah: (1) buat akun di Firebase Console → Authentication → Add user, (2) salin UID-nya, (3) daftarkan di sini lengkap dengan role dan ruangannya.</p>
             <div class="table-wrap">
                 <table class="table dashboard-table">
-                    <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
-                    <tbody id="dataTable"><tr><td colspan="4" class="page-empty">Memuat data...</td></tr></tbody>
+                    <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Ruangan</th><th>Status</th><th>Aksi</th></tr></thead>
+                    <tbody id="dataTable"><tr><td colspan="6" class="page-empty">Memuat data...</td></tr></tbody>
                 </table>
             </div>
         </div>

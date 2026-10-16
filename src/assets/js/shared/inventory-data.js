@@ -9,7 +9,7 @@ mengisi koleksi master di Firestore dulu.
 ==========================================================
 */
 
-import { getAll, COLLECTION } from "../../../services/firebase/index.js";
+import { getAll, getWhere, COLLECTION } from "../../../services/firebase/index.js";
 import { toRows } from "./admin-shell.js";
 
 /* Pilihan mengikuti spreadsheet sekolah:
@@ -78,4 +78,25 @@ export async function loadRooms() {
 
 export async function loadAssets() {
     return toRows(await getAll(COLLECTION.ASSETS));
+}
+
+/** Aset hanya untuk ruangan tertentu (portal User). Satu query per ruangan
+    supaya cocok dengan Firestore Rules. */
+export async function loadAssetsForRooms(codes) {
+    const parts = await Promise.all(
+        codes.map((k) => getWhere(COLLECTION.ASSETS, "kodeRuang", "==", k).then(toRows))
+    );
+    return parts.flat();
+}
+
+/** Kode barang berikutnya untuk sebuah ruangan, mis. KLS-X-1-004 */
+export function nextKodeBarang(assets, kodeRuang) {
+    const prefix = `${kodeRuang}-`;
+    const max = assets
+        .map((a) => String(a.kodeBarang || ""))
+        .filter((k) => k.startsWith(prefix))
+        .map((k) => parseInt(k.slice(prefix.length), 10))
+        .filter((n) => !Number.isNaN(n))
+        .reduce((a, b) => Math.max(a, b), 0);
+    return `${prefix}${String(max + 1).padStart(3, "0")}`;
 }

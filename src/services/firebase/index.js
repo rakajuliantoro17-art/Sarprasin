@@ -51,7 +51,10 @@ export const COLLECTION = {
     MAINTENANCE: "maintenance",
     REPORTS: "reports",
     LOGS: "logs",
-    MASTER: "master"
+    MASTER: "master",
+    BUILDINGS: "buildings",
+    PROCUREMENTS: "procurements",
+    PUBLIC_SUMMARY: "publicSummary"
 };
 
 

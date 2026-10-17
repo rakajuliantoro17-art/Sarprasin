@@ -12,9 +12,9 @@ import {
     initAdminPage, setText, renderTable, escapeHtml
 } from "../shared/admin-shell.js";
 import { openFormModal, confirmDialog } from "../shared/form-modal.js";
-import { JENIS_RUANG, labelOf, loadRooms, loadAssets } from "../shared/inventory-data.js";
+import { JENIS_RUANG, labelOf, loadRooms, loadAssets, loadBuildings } from "../shared/inventory-data.js";
 
-const state = { rooms: [], assets: [], q: "" };
+const state = { rooms: [], assets: [], buildings: [], q: "" };
 
 initAdminPage({
     key: "ruangan",
@@ -33,11 +33,11 @@ initAdminPage({
 
 async function refresh() {
     try {
-        [state.rooms, state.assets] = await Promise.all([loadRooms(), loadAssets()]);
+        [state.rooms, state.assets, state.buildings] = await Promise.all([loadRooms(), loadAssets(), loadBuildings()]);
     } catch (error) {
         console.error("Gagal memuat data:", error);
         document.getElementById("dataTable").innerHTML =
-            '<tr><td colspan="6" class="page-empty">Gagal memuat data (cek Firestore Rules).</td></tr>';
+            '<tr><td colspan="7" class="page-empty">Gagal memuat data (cek Firestore Rules).</td></tr>';
         return;
     }
     render();
@@ -58,6 +58,7 @@ function render() {
         { render: (r) => escapeHtml(r.kodeRuang) },
         { render: (r) => escapeHtml(r.namaRuang) },
         { render: (r) => escapeHtml(labelOf(JENIS_RUANG, r.jenis)) },
+        { render: (r) => escapeHtml(state.buildings.find((b) => b.kodeBangunan === r.kodeBangunan)?.namaBangunan || r.gedungLantai || "-") },
         { render: (r) => escapeHtml(r.penanggungJawab || "-") },
         { render: (r) => countItems(r.kodeRuang) },
         { render: (r) => `
@@ -110,7 +111,9 @@ function openForm(room = null) {
               placeholder: "mis. XI-1 atau LAB-KOM" },
             { name: "namaRuang", label: "Nama Ruang", required: true, placeholder: "mis. Kelas XI-1" },
             { name: "jenis", label: "Jenis Ruang", type: "select", required: true, options: JENIS_RUANG },
-            { name: "gedungLantai", label: "Gedung / Lantai", placeholder: "mis. Gedung A / Lt. 1" },
+            { name: "kodeBangunan", label: "Bangunan", type: "select",
+              options: state.buildings.map((b) => ({ value: b.kodeBangunan, label: b.namaBangunan })) },
+            { name: "gedungLantai", label: "Lantai / Letak", placeholder: "mis. Lt. 1 sayap timur" },
             { name: "luas", label: "Luas (m²)", type: "number", min: 0, step: "0.1" },
             { name: "kapasitas", label: "Kapasitas (orang)", type: "number", min: 0, step: 1 },
             { name: "penanggungJawab", label: "Penanggung Jawab", full: true,

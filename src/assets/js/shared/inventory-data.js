@@ -44,6 +44,16 @@ export const JENIS_RUANG = [
     { value: "LAINNYA",    label: "Lainnya" }
 ];
 
+export const JENIS_BANGUNAN = [
+    { value: "GEDUNG_KELAS", label: "Gedung Kelas" },
+    { value: "GEDUNG_KANTOR", label: "Gedung Kantor / Administrasi" },
+    { value: "LAB_PERPUS", label: "Gedung Lab / Perpustakaan" },
+    { value: "OLAHRAGA", label: "Gedung / Lapangan Olahraga" },
+    { value: "IBADAH", label: "Tempat Ibadah" },
+    { value: "PENUNJANG", label: "Penunjang (kantin, toilet, gudang, dll.)" },
+    { value: "LAINNYA", label: "Lainnya" }
+];
+
 export const SEKOLAH = {
     instansi1: "PEMERINTAH PROVINSI JAWA TIMUR",
     instansi2: "DINAS PENDIDIKAN",
@@ -75,6 +85,20 @@ export async function loadRooms() {
         }))
         .sort((a, b) => a.namaRuang.localeCompare(b.namaRuang, "id", { numeric: true }));
 }
+
+export async function loadBuildings() {
+    const rows = toRows(await getAll(COLLECTION.BUILDINGS));
+    return rows
+        .map((b) => ({ ...b, kodeBangunan: b.kodeBangunan || b.id, namaBangunan: b.namaBangunan || b.id }))
+        .sort((a, b) => a.namaBangunan.localeCompare(b.namaBangunan, "id", { numeric: true }));
+}
+
+export async function loadProcurements() {
+    return toRows(await getAll(COLLECTION.PROCUREMENTS))
+        .sort((a, b) => String(b.tanggal || "").localeCompare(String(a.tanggal || "")));
+}
+
+export const rupiah = (n) => "Rp " + (Number(n) || 0).toLocaleString("id-ID");
 
 export async function loadAssets() {
     return toRows(await getAll(COLLECTION.ASSETS));

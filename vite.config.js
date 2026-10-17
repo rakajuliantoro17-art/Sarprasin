@@ -32,6 +32,8 @@ export default defineConfig({
                 adminLaporan: resolve(__dirname, "src/pages/admin/laporan/index.html"),
                 adminUsers: resolve(__dirname, "src/pages/admin/users/index.html"),
                 adminSettings: resolve(__dirname, "src/pages/admin/settings/index.html"),
+                adminBangunan: resolve(__dirname, "src/pages/admin/bangunan/index.html"),
+                adminPengadaan: resolve(__dirname, "src/pages/admin/pengadaan/index.html"),
                 adminKir: resolve(__dirname, "src/pages/admin/kir/index.html"),
                 executive: resolve(__dirname, "src/pages/executive/index.html"),
                 user: resolve(__dirname, "src/pages/user/index.html")

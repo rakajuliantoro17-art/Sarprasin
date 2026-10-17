@@ -49,6 +49,14 @@
       "destination": "/src/pages/admin/settings/index.html"
     },
     {
+      "source": "/admin/bangunan",
+      "destination": "/src/pages/admin/bangunan/index.html"
+    },
+    {
+      "source": "/admin/pengadaan",
+      "destination": "/src/pages/admin/pengadaan/index.html"
+    },
+    {
       "source": "/eksekutif",
       "destination": "/src/pages/executive/index.html"
     },

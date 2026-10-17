@@ -3,26 +3,28 @@
 SARPRASIN v2.0 - Kartu Inventaris Ruangan (KIR)
 File : src/assets/js/pages/admin-kir.js
 
-Pratinjau + cetak KIR per ruangan (A4 landscape).
-Ringkasan kondisi: B = Baik, RR = Rusak Ringan, RB = Rusak Berat.
+Pratinjau + cetak KIR per ruangan/kelas (A4 portrait), format mengikuti
+spreadsheet sekolah. Penandatangan disimpan di Firestore (master/kir)
+oleh admin; role lain hanya mencetak.
 ==========================================================
 */
 
+import { createWithId, COLLECTION } from "../../../services/firebase/index.js";
 import { initAdminPage, escapeHtml } from "../shared/admin-shell.js";
-import { loadRooms, loadAssets } from "../shared/inventory-data.js";
+import { loadRooms, loadAssets, loadSigners, SIGNER_FIELDS } from "../shared/inventory-data.js";
 import { kirHtml } from "../shared/kir-sheet.js";
 
-const STORE_KEY = "sarprasin_kepsek";
-const state = { rooms: [], assets: [] };
+const state = { rooms: [], assets: [], signers: {} };
 
 initAdminPage({
     key: "kir",
     activeKey: "ruangan",
     title: "KIR",
-    onReady: async () => {
+    onReady: async ({ role }) => {
 
         try {
-            [state.rooms, state.assets] = await Promise.all([loadRooms(), loadAssets()]);
+            [state.rooms, state.assets, state.signers] =
+                await Promise.all([loadRooms(), loadAssets(), loadSigners()]);
         } catch (error) {
             console.error(error);
             document.getElementById("kirSheet").innerHTML =
@@ -31,7 +33,7 @@ initAdminPage({
         }
 
         const select = document.getElementById("roomSelect");
-        select.innerHTML = '<option value="">- pilih ruangan -</option>' +
+        select.innerHTML = '<option value="">- pilih ruangan / kelas -</option>' +
             state.rooms.map((r) =>
                 `<option value="${escapeHtml(r.kodeRuang)}">${escapeHtml(r.namaRuang)}</option>`
             ).join("");
@@ -39,12 +41,17 @@ initAdminPage({
         const initial = new URLSearchParams(location.search).get("ruang") || "";
         if (initial && state.rooms.some((r) => r.kodeRuang === initial)) select.value = initial;
 
-        restoreKepsek();
+        SIGNER_FIELDS.forEach((f) => {
+            const el = document.getElementById(f);
+            el.value = state.signers[f] || "";
+            el.addEventListener("input", render);
+        });
+
+        const saveBtn = document.getElementById("saveSignersBtn");
+        saveBtn.hidden = role !== "admin";
+        saveBtn.addEventListener("click", saveSigners);
 
         select.addEventListener("change", render);
-        ["kepsekName", "kepsekNip"].forEach((id) =>
-            document.getElementById(id).addEventListener("input", () => { saveKepsek(); render(); })
-        );
         document.getElementById("printBtn").addEventListener("click", () => {
             if (!select.value) { alert("Pilih ruangan dulu."); return; }
             window.print();
@@ -54,21 +61,19 @@ initAdminPage({
     }
 });
 
-function restoreKepsek() {
-    try {
-        const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
-        document.getElementById("kepsekName").value = saved.name || "";
-        document.getElementById("kepsekNip").value = saved.nip || "";
-    } catch { /* abaikan */ }
+function currentSigners() {
+    return Object.fromEntries(SIGNER_FIELDS.map((f) => [f, document.getElementById(f).value.trim()]));
 }
 
-function saveKepsek() {
+async function saveSigners() {
+    const msg = document.getElementById("signerMsg");
     try {
-        localStorage.setItem(STORE_KEY, JSON.stringify({
-            name: document.getElementById("kepsekName").value,
-            nip: document.getElementById("kepsekNip").value
-        }));
-    } catch { /* abaikan */ }
+        await createWithId(COLLECTION.MASTER, "kir", { ...currentSigners(), updatedAt: new Date().toISOString() });
+        msg.textContent = "Penandatangan tersimpan untuk semua pengguna.";
+    } catch (error) {
+        console.error(error);
+        msg.textContent = "Gagal menyimpan: " + error.message;
+    }
 }
 
 function render() {
@@ -82,8 +87,5 @@ function render() {
         return;
     }
 
-    sheet.innerHTML = kirHtml(room, state.assets, {
-        kepsekName: document.getElementById("kepsekName").value.trim(),
-        kepsekNip: document.getElementById("kepsekNip").value.trim()
-    });
+    sheet.innerHTML = kirHtml(room, state.assets, currentSigners());
 }

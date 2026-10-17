@@ -27,11 +27,11 @@
 
         <div class="dashboard-panel glass" id="importPanel" hidden>
             <div class="dashboard-title"><h2 style="font-size:1.1rem">Impor Data Awal dari Spreadsheet</h2></div>
-            <p>Memasukkan <strong id="impBuildings">0</strong> bangunan, <strong id="impRooms">0</strong> ruangan dan
-               <strong id="impAssets">0</strong> barang dari spreadsheet "Asset SMAN 1 Sooko" (sheet KIB dan KIR per ruangan).
-               Data yang sudah ada tidak ditimpa, jadi aman dijalankan lebih dari sekali.</p>
-            <p class="hint">Kode barang resmi (mis. 1.3.2.05.02.04.004) disimpan di kolom "kodeBarangResmi". Barang yang jumlah atau
-               kodenya kosong di spreadsheet ditandai "perlu verifikasi".</p>
+            <p>Memasukkan <strong id="impRooms">0</strong> ruangan dan <strong id="impAssets">0</strong> barang
+               dari spreadsheet "Inventarisasi Asset" ke database aplikasi. Data yang sudah ada tidak ditimpa,
+               jadi aman dijalankan lebih dari sekali.</p>
+            <p class="hint">Lokasi di spreadsheet yang mirip digabung (mis. "Labkom 1,3,4" dan "Labkom 4" menjadi satu ruang Labkom).
+               Kode barang dibuat ulang agar unik; kode lama disimpan di kolom "kodeLama".</p>
             <button type="button" class="btn-primary" id="importBtn">⬇️ Impor Data Awal</button>
             <p class="hint" id="importMsg"></p>
         </div>

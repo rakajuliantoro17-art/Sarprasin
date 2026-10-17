@@ -9,7 +9,7 @@ mengisi koleksi master di Firestore dulu.
 ==========================================================
 */
 
-import { getAll, getWhere, COLLECTION } from "../../../services/firebase/index.js";
+import { getAll, getById, getWhere, COLLECTION } from "../../../services/firebase/index.js";
 import { toRows } from "./admin-shell.js";
 
 /* Pilihan mengikuti spreadsheet sekolah:
@@ -54,13 +54,38 @@ export const JENIS_BANGUNAN = [
     { value: "LAINNYA", label: "Lainnya" }
 ];
 
+/* Kop & identitas mengikuti format KIR di spreadsheet sekolah */
 export const SEKOLAH = {
     instansi1: "PEMERINTAH PROVINSI JAWA TIMUR",
     instansi2: "DINAS PENDIDIKAN",
-    nama: "SMA NEGERI 1 SOOKO",
-    alamat: "Kabupaten Mojokerto, Jawa Timur",
+    nama: "SMA NEGERI 1 SOOKO MOJOKERTO",
+    alamat: "Jalan R. Akhmad Basuni No. 361 Kec. Sooko, Kabupaten Mojokerto 61361",
+    kontak: "Pos-el : info@sman1sooko.sch.id Laman : www.sman1sooko.sch.id",
+    provinsi: "JAWA TIMUR",
+    kabupaten: "MOJOKERTO",
+    skpd: "CABANG DINAS PENDIDIKAN JAWA TIMUR WIL KAB/KOTA MOJOKERTO",
+    unitKerja: "SMAN 1 SOOKO",
+    kodeLokasi: "010101.00020.21110",
     kota: "Mojokerto"
 };
+
+/* Penandatangan KIR disimpan di Firestore (master/kir) supaya tidak ada
+   nama/NIP pejabat di kode publik. Diisi admin sekali di halaman KIR. */
+export const SIGNER_FIELDS = [
+    "kepsekNama", "kepsekPangkat", "kepsekNip",
+    "wakaNama", "wakaNip",
+    "pengurusNama", "pengurusNip"
+];
+
+export async function loadSigners() {
+    try {
+        const snap = await getById(COLLECTION.MASTER, "kir");
+        return snap.exists() ? snap.data() : {};
+    } catch (error) {
+        console.warn("Penandatangan KIR belum bisa dimuat:", error.message);
+        return {};
+    }
+}
 
 export function labelOf(list, value) {
     return list.find((i) => i.value === value)?.label || value || "-";

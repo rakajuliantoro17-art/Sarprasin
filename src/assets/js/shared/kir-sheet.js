@@ -4,43 +4,53 @@ SARPRASIN v2.0
 TEMPLATE KARTU INVENTARIS RUANGAN (KIR)
 File : src/assets/js/shared/kir-sheet.js
 
-Dipakai portal Admin (/admin/kir) dan portal Pengguna (/user).
-Mengembalikan HTML kartu; styling ada di layout/shell.css (.kir-*).
+Mengikuti format KIR di spreadsheet sekolah ("Asset SMAN 1 Sooko"):
+kop, identitas (provinsi s.d. ruangan/kelas, no. kode lokasi),
+tabel 7 kolom (No, Nama Barang, Merk/Model, Tahun Pembelian,
+No. Kode Barang, Jumlah Barang, Keterangan), lalu tanda tangan
+Pengurus Barang, Wakasek Sarpras dan Kepala Sekolah.
+
+Dipakai portal Admin (/admin/kir) dan portal Pengguna (/user),
+untuk ruangan maupun kelas.
 ==========================================================
 */
 
 import { escapeHtml } from "./admin-shell.js";
-import { SEKOLAH, JENIS_RUANG, labelOf, normalizeKondisi } from "./inventory-data.js";
+import { SEKOLAH, KONDISI, labelOf, normalizeKondisi } from "./inventory-data.js";
 
-export function kirHtml(room, assets, { kepsekName = "", kepsekNip = "" } = {}) {
+const dots = "..............................";
+const val = (v) => escapeHtml(v || dots);
+
+function signBlock(title, name, nip, extra = "") {
+    return `
+        <div>
+            <p>${title}</p>
+            <div class="kir-sign-space"></div>
+            <p><strong><u>${val(name)}</u></strong>${extra ? `<br>${escapeHtml(extra)}` : ""}<br>NIP. ${val(nip)}</p>
+        </div>`;
+}
+
+export function kirHtml(room, assets, signers = {}) {
 
     const items = assets
         .filter((a) => a.kodeRuang === room.kodeRuang)
         .sort((a, b) => String(a.kodeBarang || "").localeCompare(String(b.kodeBarang || ""), "id", { numeric: true }));
 
-    const totals = { BAIK: 0, RUSAK_RINGAN: 0, RUSAK_BERAT: 0 };
-    let totalQty = 0;
-
     const body = items.map((a, i) => {
-        const k = normalizeKondisi(a.kodeKondisi || a.kondisi);
-        const qty = Number(a.jumlah) || 1;
-        totals[k] += qty;
-        totalQty += qty;
-        const mark = (code) => (k === code ? qty : "");
+        const kondisi = labelOf(KONDISI, normalizeKondisi(a.kodeKondisi || a.kondisi))
+            .replace(" (Rusak Ringan)", "");
+        const note = a.keterangan ? ` — ${a.keterangan}` : "";
         return `
             <tr>
                 <td class="c">${i + 1}</td>
                 <td>${escapeHtml(a.namaBarang)}</td>
-                <td>${escapeHtml(a.merk || "-")}</td>
-                <td>${escapeHtml(a.kodeBarangResmi || a.kodeBarang || "-")}</td>
-                <td class="c">${escapeHtml(a.tahun || "-")}</td>
-                <td class="c">${qty}</td>
-                <td class="c">${mark("BAIK")}</td>
-                <td class="c">${mark("RUSAK_RINGAN")}</td>
-                <td class="c">${mark("RUSAK_BERAT")}</td>
-                <td>${escapeHtml(a.keterangan || "")}</td>
+                <td>${escapeHtml(a.merk || "")}</td>
+                <td class="c">${escapeHtml(a.tahun || "")}</td>
+                <td>${escapeHtml(a.kodeBarangResmi || a.kodeBarang || "")}</td>
+                <td class="c">${escapeHtml(a.jumlah ?? 1)}</td>
+                <td>${escapeHtml(kondisi + note)}</td>
             </tr>`;
-    }).join("") || `<tr><td colspan="10" class="c">Belum ada barang tercatat di ruangan ini.</td></tr>`;
+    }).join("") || `<tr><td colspan="7" class="c">Belum ada barang tercatat di ruangan ini.</td></tr>`;
 
     const tanggal = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 
@@ -52,59 +62,45 @@ export function kirHtml(room, assets, { kepsekName = "", kepsekNip = "" } = {}) 
                 <div>${SEKOLAH.instansi2}</div>
                 <strong>${SEKOLAH.nama}</strong>
                 <div class="kir-addr">${SEKOLAH.alamat}</div>
+                <div class="kir-addr">${SEKOLAH.kontak}</div>
             </div>
         </div>
 
-        <h2 class="kir-title">KARTU INVENTARIS RUANGAN (KIR)</h2>
+        <h2 class="kir-title"><u>KARTU INVENTARIS RUANGAN</u></h2>
 
         <table class="kir-meta">
-            <tr><td>Nama Ruang</td><td>: ${escapeHtml(room.namaRuang)}</td>
-                <td>Kode Ruang</td><td>: ${escapeHtml(room.kodeRuang)}</td></tr>
-            <tr><td>Jenis Ruang</td><td>: ${escapeHtml(labelOf(JENIS_RUANG, room.jenis))}</td>
-                <td>Gedung / Lantai</td><td>: ${escapeHtml(room.gedungLantai || "-")}</td></tr>
-            <tr><td>Luas / Kapasitas</td><td>: ${room.luas ? escapeHtml(room.luas) + " m²" : "-"} / ${room.kapasitas ? escapeHtml(room.kapasitas) + " orang" : "-"}</td>
-                <td>Penanggung Jawab</td><td>: ${escapeHtml(room.penanggungJawab || "-")}</td></tr>
+            <tr><td>PROVINSI</td><td>: ${SEKOLAH.provinsi}</td></tr>
+            <tr><td>KABUPATEN</td><td>: ${SEKOLAH.kabupaten}</td></tr>
+            <tr><td>SKPD</td><td>: ${SEKOLAH.skpd}</td></tr>
+            <tr><td>UNIT KERJA</td><td>: ${SEKOLAH.unitKerja}</td></tr>
+            <tr><td>RUANGAN/KELAS</td><td>: ${escapeHtml(String(room.namaRuang).toUpperCase())}</td></tr>
+            <tr><td></td><td class="r">NO. KODE LOKASI : ${SEKOLAH.kodeLokasi}</td></tr>
         </table>
 
         <table class="kir-table">
             <thead>
                 <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Nama Barang</th>
-                    <th rowspan="2">Merk / Model</th>
-                    <th rowspan="2">Kode Barang</th>
-                    <th rowspan="2">Tahun</th>
-                    <th rowspan="2">Jml</th>
-                    <th colspan="3">Kondisi</th>
-                    <th rowspan="2">Keterangan</th>
+                    <th>No</th><th>Nama Barang</th><th>Merk/Model</th><th>Tahun Pembelian</th>
+                    <th>No. Kode Barang</th><th>Jumlah Barang</th><th>Keterangan</th>
                 </tr>
-                <tr><th>B</th><th>RR</th><th>RB</th></tr>
+                <tr class="kir-numrow"><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>10</th></tr>
             </thead>
             <tbody>${body}</tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="5" class="r"><strong>Jumlah</strong></td>
-                    <td class="c"><strong>${totalQty}</strong></td>
-                    <td class="c"><strong>${totals.BAIK}</strong></td>
-                    <td class="c"><strong>${totals.RUSAK_RINGAN}</strong></td>
-                    <td class="c"><strong>${totals.RUSAK_BERAT}</strong></td>
-                    <td></td>
-                </tr>
-            </tfoot>
         </table>
 
-        <p class="kir-note">B = Baik, RR = Rusak Ringan (Perlu Perbaikan), RB = Rusak Berat</p>
-
         <div class="kir-sign">
+            <div class="kir-sign-slot"></div>
+            <div class="kir-sign-slot"><p>${SEKOLAH.kota}, ${tanggal}</p></div>
+        </div>
+        <div class="kir-sign">
+            ${signBlock("Pengurus Barang", signers.pengurusNama, signers.pengurusNip)}
+            ${signBlock("Wakasek SARPRAS", signers.wakaNama, signers.wakaNip)}
+        </div>
+        <div class="kir-sign kir-sign-center">
             <div>
-                <p>Mengetahui,<br>Kepala Sekolah</p>
+                <p>Mengetahui<br>Kepala SMA Negeri 1 Sooko</p>
                 <div class="kir-sign-space"></div>
-                <p><strong><u>${escapeHtml(kepsekName || "..............................")}</u></strong><br>NIP. ${escapeHtml(kepsekNip || "..............................")}</p>
-            </div>
-            <div>
-                <p>${SEKOLAH.kota}, ${tanggal}<br>Penanggung Jawab Ruang</p>
-                <div class="kir-sign-space"></div>
-                <p><strong><u>${escapeHtml(room.penanggungJawab || "..............................")}</u></strong></p>
+                <p><strong><u>${val(signers.kepsekNama)}</u></strong><br>${escapeHtml(signers.kepsekPangkat || "")}<br>NIP. ${val(signers.kepsekNip)}</p>
             </div>
         </div>`;
 }

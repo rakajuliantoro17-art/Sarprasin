@@ -18,12 +18,12 @@ import {
 } from "../shared/admin-shell.js";
 import { openFormModal } from "../shared/form-modal.js";
 import {
-    KONDISI, labelOf, normalizeKondisi, loadRooms, loadAssetsForRooms, nextKodeBarang
+    KONDISI, labelOf, normalizeKondisi, loadRooms, loadAssetsForRooms, nextKodeBarang, loadSigners
 } from "../shared/inventory-data.js";
 import { kirHtml } from "../shared/kir-sheet.js";
 import { uploadPhoto } from "../shared/photo.js";
 
-const state = { uid: null, name: "", myCodes: [], rooms: [], assets: [], reports: [], room: "" };
+const state = { signers: {}, uid: null, name: "", myCodes: [], rooms: [], assets: [], reports: [], room: "" };
 
 initPortalPage({
     portal: "user",
@@ -44,6 +44,7 @@ initPortalPage({
 
         try {
             const allRooms = await loadRooms();
+            state.signers = await loadSigners();
             state.rooms = allRooms.filter((r) => state.myCodes.includes(r.kodeRuang));
         } catch (error) {
             console.error(error);
@@ -109,7 +110,7 @@ function render() {
     setText("rowCount", `${rows.length} jenis barang di ruangan ini`);
 
     const room = state.rooms.find((r) => r.kodeRuang === state.room);
-    document.getElementById("kirSheet").innerHTML = room ? kirHtml(room, state.assets) : "";
+    document.getElementById("kirSheet").innerHTML = room ? kirHtml(room, state.assets, state.signers) : "";
 
     document.getElementById("reportTable").innerHTML = state.reports.length
         ? state.reports

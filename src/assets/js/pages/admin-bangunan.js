@@ -62,7 +62,7 @@ function render() {
         { render: (b) => escapeHtml(labelOf(JENIS_BANGUNAN, b.jenis)) },
         { render: (b) => escapeHtml(b.jumlahLantai ?? "-") },
         { render: (b) => escapeHtml(b.luas ?? "-") },
-        { render: (b) => escapeHtml(labelOf(KONDISI, normalizeKondisi(b.kodeKondisi))) },
+        { render: (b) => escapeHtml(b.kodeKondisi ? labelOf(KONDISI, normalizeKondisi(b.kodeKondisi)) : "-") },
         { render: (b) => roomsOf(b).length },
         { render: (b) => itemCount(b) },
         { render: (b) => `
@@ -102,13 +102,12 @@ function openForm(b = null) {
     const editing = Boolean(b);
     openFormModal({
         title: editing ? "Edit Bangunan" : "Tambah Bangunan",
-        values: b ? { ...b, kodeKondisi: normalizeKondisi(b.kodeKondisi) }
-                  : { jenis: "GEDUNG_KELAS", kodeKondisi: "BAIK" },
+        values: b || { jenis: "GEDUNG_KELAS" },
         fields: [
             { name: "kodeBangunan", label: "Kode Bangunan", required: true, disabled: editing, placeholder: "mis. GD-A" },
             { name: "namaBangunan", label: "Nama Bangunan", required: true, placeholder: "mis. Gedung A" },
             { name: "jenis", label: "Jenis", type: "select", required: true, options: JENIS_BANGUNAN },
-            { name: "kodeKondisi", label: "Kondisi", type: "select", required: true, options: KONDISI },
+            { name: "kodeKondisi", label: "Kondisi", type: "select", options: KONDISI },
             { name: "jumlahLantai", label: "Jumlah Lantai", type: "number", min: 1, step: 1 },
             { name: "luas", label: "Luas (m²)", type: "number", min: 0, step: "0.1" },
             { name: "tahunBangun", label: "Tahun Dibangun", type: "number", min: 1900, step: 1 },

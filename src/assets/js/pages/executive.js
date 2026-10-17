@@ -129,7 +129,7 @@ initPortalPage({
 
         fill("buildingTable", [...perBuilding.values()], [
             (r) => escapeHtml(r.b.namaBangunan),
-            (r) => escapeHtml(labelOf(KONDISI, normalizeKondisi(r.b.kodeKondisi))),
+            (r) => escapeHtml(r.b.kodeKondisi ? labelOf(KONDISI, normalizeKondisi(r.b.kodeKondisi)) : "-"),
             (r) => rooms.filter((x) => x.kodeBangunan === r.b.kodeBangunan).length,
             (r) => r.total, pctCell
         ], "Belum ada data bangunan.");

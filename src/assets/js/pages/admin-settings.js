@@ -3,7 +3,7 @@
 SARPRASIN v2.0 - Settings (khusus admin)
 File : src/assets/js/pages/admin-settings.js
 
-Termasuk impor data awal dari spreadsheet (seed-awal.json).
+Termasuk impor data awal dari spreadsheet (seed-spreadsheet.json).
 Tidak menimpa dokumen yang sudah ada.
 ==========================================================
 */
@@ -21,7 +21,8 @@ initAdminPage({
         setText("setRole", role);
         setText("setStatus", navigator.onLine ? "Online" : "Offline");
 
-        const seed = (await import("../../data/seed-awal.json")).default;
+        const seed = (await import("../../data/seed-spreadsheet.json")).default;
+        setText("impBuildings", seed.buildings.length);
         setText("impRooms", seed.rooms.length);
         setText("impAssets", seed.assets.length);
         document.getElementById("importPanel").hidden = false;
@@ -35,7 +36,7 @@ async function runImport(seed) {
     const btn = document.getElementById("importBtn");
     const msg = document.getElementById("importMsg");
 
-    if (!window.confirm(`Impor ${seed.rooms.length} ruangan dan ${seed.assets.length} barang sekarang?`)) return;
+    if (!window.confirm(`Impor ${seed.buildings.length} bangunan, ${seed.rooms.length} ruangan dan ${seed.assets.length} barang sekarang?`)) return;
 
     btn.disabled = true;
     let added = 0;
@@ -51,6 +52,10 @@ async function runImport(seed) {
     };
 
     try {
+        for (const b of seed.buildings) {
+            msg.textContent = `Mengimpor ${b.namaBangunan}...`;
+            await put(COLLECTION.BUILDINGS, b);
+        }
         for (const room of seed.rooms) {
             msg.textContent = `Mengimpor ruangan ${room.namaRuang}...`;
             await put(COLLECTION.ROOMS, room);

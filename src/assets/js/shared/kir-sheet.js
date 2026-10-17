@@ -32,7 +32,7 @@ export function kirHtml(room, assets, { kepsekName = "", kepsekNip = "" } = {}) 
                 <td class="c">${i + 1}</td>
                 <td>${escapeHtml(a.namaBarang)}</td>
                 <td>${escapeHtml(a.merk || "-")}</td>
-                <td>${escapeHtml(a.kodeBarang || "-")}</td>
+                <td>${escapeHtml(a.kodeBarangResmi || a.kodeBarang || "-")}</td>
                 <td class="c">${escapeHtml(a.tahun || "-")}</td>
                 <td class="c">${qty}</td>
                 <td class="c">${mark("BAIK")}</td>

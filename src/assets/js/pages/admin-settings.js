@@ -27,6 +27,11 @@ initAdminPage({
         document.getElementById("importPanel").hidden = false;
 
         document.getElementById("importBtn").addEventListener("click", () => runImport(seed));
+
+        const bld = (await import("../../data/seed-bangunan.json")).default;
+        setText("impBld", bld.buildings.length);
+        document.getElementById("importBldPanel").hidden = false;
+        document.getElementById("importBldBtn").addEventListener("click", () => runBuildingImport(bld));
     }
 });
 
@@ -63,6 +68,35 @@ async function runImport(seed) {
     } catch (error) {
         console.error(error);
         msg.textContent = `Berhenti di tengah jalan: ${error.message}. ${added} data sudah masuk. Cek Firestore Rules lalu ulangi (aman).`;
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function runBuildingImport(seed) {
+
+    const btn = document.getElementById("importBldBtn");
+    const msg = document.getElementById("importBldMsg");
+
+    if (!window.confirm(`Impor ${seed.buildings.length} bangunan sekarang?`)) return;
+
+    btn.disabled = true;
+    let added = 0;
+    let skipped = 0;
+    const now = new Date().toISOString();
+
+    try {
+        for (const b of seed.buildings) {
+            msg.textContent = `Mengimpor ${b.namaBangunan}...`;
+            const { id, ...data } = b;
+            if ((await getById(COLLECTION.BUILDINGS, id)).exists()) { skipped++; continue; }
+            await createWithId(COLLECTION.BUILDINGS, id, { ...data, createdAt: now, updatedAt: now });
+            added++;
+        }
+        msg.textContent = `Selesai: ${added} bangunan baru, ${skipped} sudah ada (dilewati).`;
+    } catch (error) {
+        console.error(error);
+        msg.textContent = `Berhenti di tengah jalan: ${error.message}. ${added} bangunan sudah masuk. Ulangi (aman).`;
     } finally {
         btn.disabled = false;
     }

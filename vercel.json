@@ -57,6 +57,10 @@
       "destination": "/src/pages/admin/pengadaan/index.html"
     },
     {
+      "source": "/admin/impor",
+      "destination": "/src/pages/admin/impor/index.html"
+    },
+    {
       "source": "/eksekutif",
       "destination": "/src/pages/executive/index.html"
     },

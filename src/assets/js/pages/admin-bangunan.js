@@ -63,7 +63,10 @@ function render() {
         { render: (b) => escapeHtml(b.jumlahLantai ?? "-") },
         { render: (b) => escapeHtml(b.luas ?? "-") },
         { render: (b) => escapeHtml(b.kodeKondisi ? labelOf(KONDISI, normalizeKondisi(b.kodeKondisi)) : "-") },
-        { render: (b) => roomsOf(b).length },
+        { render: (b) => {
+            const linked = roomsOf(b).length;
+            const listed = String(b.daftarRuang || "").split("\n").filter(Boolean).length;
+            return linked + (listed ? ` <small title="Daftar ruang di KIB">(KIB: ${listed})</small>` : ""); } },
         { render: (b) => itemCount(b) },
         { render: (b) => `
             <a class="btn-mini" href="/admin/ruangan">Ruang</a>
@@ -113,6 +116,7 @@ function openForm(b = null) {
             { name: "tahunBangun", label: "Tahun Dibangun", type: "number", min: 1900, step: 1 },
             { name: "kodeSumber", label: "Sumber Dana", type: "select", options: SUMBER_DANA },
             { name: "nilai", label: "Nilai Perolehan (Rp)", type: "number", min: 0, step: 1 },
+            { name: "daftarRuang", label: "Isi bangunan: daftar ruang (satu per baris)", type: "textarea", full: true },
             { name: "keterangan", label: "Keterangan", type: "textarea", full: true }
         ],
         onSubmit: async (data) => {

@@ -149,3 +149,9 @@ Responsif: dirancang mobile-first karena diakses lewat HP.
 .exec-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 1024px) { .exec-two { grid-template-columns: 1fr; } }
 .dashboard-stat small { opacity: .7; }
+
+/* Impor data */
+.imp-warn td { background: rgba(217, 119, 6, .12); }
+.imp-error td { background: rgba(220, 38, 38, .14); }
+.imp-notes { font-size: .78rem; min-width: 260px; }
+.dashboard-table td input[type="text"], .dashboard-table td select { max-width: 200px; }

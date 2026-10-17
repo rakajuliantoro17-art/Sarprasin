@@ -147,7 +147,8 @@ function openForm(row = null) {
         fields: [
             { name: "namaBarang", label: "Nama Barang", required: true, full: true, placeholder: "mis. Meja Siswa" },
             { name: "merk", label: "Merk / Model", placeholder: "mis. Chitose" },
-            { name: "kodeBarang", label: "Kode Barang", placeholder: "kosongkan = otomatis" },
+            { name: "kodeBarang", label: "Kode Barang (internal)", placeholder: "kosongkan = otomatis" },
+            { name: "kodeBarangResmi", label: "Kode Barang Resmi (KIB/KIR)", placeholder: "mis. 1.3.2.05.02.04.004" },
             { name: "kodeRuang", label: "Ruangan", type: "select", required: true,
               options: state.rooms.map((r) => ({ value: r.kodeRuang, label: r.namaRuang })) },
             { name: "jumlah", label: "Jumlah", type: "number", required: true, min: 1, step: 1 },

@@ -31,6 +31,7 @@ export const MENU = [
     { key: "ruangan",     icon: "🏫", text: "Ruangan",         href: "/admin/ruangan",     roles: ALL_ADMIN },
     { key: "bangunan",    icon: "🏢", text: "Bangunan",        href: "/admin/bangunan",    roles: ["admin", "staff", "arsiparis"] },
     { key: "pengadaan",   icon: "🛒", text: "Pengadaan",       href: "/admin/pengadaan",   roles: ["admin", "staff", "arsiparis"] },
+    { key: "impor",       icon: "📥", text: "Impor Data",      href: "/admin/impor",       roles: ["admin", "staff", "arsiparis"] },
     { key: "maintenance", icon: "🔧", text: "Maintenance",     href: "/admin/maintenance", roles: ["admin", "waka_sarpras", "staff"], badge: true },
     { key: "laporan",     icon: "📄", text: "Laporan",         href: "/admin/laporan",     roles: ["admin", "waka_sarpras", "arsiparis"] },
     { key: "exec",        icon: "📈", text: "Portal Eksekutif", href: "/eksekutif",        roles: ["waka_sarpras"] },

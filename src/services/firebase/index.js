@@ -32,6 +32,7 @@ import {
 } from "./firebase.storage.js";
 
 import { callFunction } from "./firebase.functions.js";
+export { createAuthAccount } from "./firebase.accounts.js";
 
 import {
     trackEvent,

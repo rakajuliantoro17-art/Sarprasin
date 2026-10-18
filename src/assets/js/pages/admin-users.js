@@ -3,10 +3,15 @@
 SARPRASIN v2.0 - Manajemen Akun (khusus admin)
 File : src/assets/js/pages/admin-users.js
 
-Admin membuat akun login + profil (role, ruangan) langsung dari
-sini lewat Cloud Function (functions/userAdmin.js), mengubah
-role/status, mengganti password, mengirim email atur-ulang
-password, dan menghapus akun.
+Admin membuat akun login + profil (role, ruangan), mengubah
+role/status, mengirim email atur-ulang password, dan mengimpor
+banyak akun dari spreadsheet.
+
+Dua mode (VITE_USE_FUNCTIONS):
+ - default (kosong)  : GRATIS, paket Spark. Akun dibuat lewat instance
+                       Firebase kedua di browser. Tidak bisa mengganti
+                       password orang lain / menghapus akun login.
+ - "true"            : lewat Cloud Functions (paket Blaze), fitur penuh.
 
 Tombol "Daftarkan UID yang sudah ada" tetap tersedia untuk akun
 yang dulu dibuat manual di Firebase Console.
@@ -14,7 +19,7 @@ yang dulu dibuat manual di Firebase Console.
 */
 
 import {
-    createWithId, update, getAll, callFunction, resetPassword, COLLECTION
+    createWithId, update, remove, getAll, callFunction, resetPassword, createAuthAccount, COLLECTION
 } from "../../../services/firebase/index.js";
 import {
     initAdminPage, setText, toRows, renderTable, escapeHtml
@@ -22,6 +27,9 @@ import {
 import { openFormModal, confirmDialog } from "../shared/form-modal.js";
 import { loadRooms } from "../shared/inventory-data.js";
 import { ROLE_LABEL, roleLabel } from "../../../config/portals.js";
+import { parseAccounts, randomPassword } from "../shared/account-import.js";
+
+const USE_FUNCTIONS = import.meta.env.VITE_USE_FUNCTIONS === "true";
 
 const state = { users: [], rooms: [], q: "", roleFilter: "", me: null };
 
@@ -49,6 +57,8 @@ initAdminPage({
         });
         document.getElementById("addBtn").addEventListener("click", () => openCreateForm());
         document.getElementById("linkBtn").addEventListener("click", () => openLinkForm());
+        document.getElementById("importBtn").addEventListener("click", () => openImportModal());
+        document.getElementById("exportBtn").addEventListener("click", exportUsers);
 
         document.getElementById("dataTable").addEventListener("click", onTableClick);
     }
@@ -118,7 +128,7 @@ function actionButtons(u) {
     const self = u.id === state.me;
     return [
         `<button type="button" class="btn-mini" data-act="edit" data-id="${id}">Edit</button>`,
-        `<button type="button" class="btn-mini" data-act="password" data-id="${id}">Password</button>`,
+        USE_FUNCTIONS ? `<button type="button" class="btn-mini" data-act="password" data-id="${id}">Password</button>` : "",
         `<button type="button" class="btn-mini" data-act="reset" data-id="${id}" title="Kirim email atur ulang password">Email reset</button>`,
         self ? "" : `<button type="button" class="btn-mini danger" data-act="delete" data-id="${id}">Hapus</button>`
     ].join("");
@@ -151,12 +161,32 @@ async function onTableClick(e) {
    BUAT AKUN BARU
 ====================================================== */
 
-/** Password acak 12 karakter tanpa huruf/angka yang mudah tertukar. */
-function randomPassword(length = 12) {
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-    const bytes = new Uint32Array(length);
-    crypto.getRandomValues(bytes);
-    return [...bytes].map((n) => alphabet[n % alphabet.length]).join("");
+/** Buat akun login + profil. Mengembalikan { uid, email }. */
+async function createAccount({ name, email, role, password, ruangan }) {
+
+    const rooms = ROOM_ROLES.includes(role) ? (ruangan || []) : [];
+
+    if (USE_FUNCTIONS) {
+        const created = await callFunction("createUserAccount", { name, email, role, password, ruangan: rooms });
+        return { uid: created.uid, email: created.email || email };
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+    const uid = await createAuthAccount(cleanEmail, password);
+    const stamp = new Date().toISOString();
+
+    try {
+        await createWithId(COLLECTION.USERS, uid, {
+            name, email: cleanEmail, role, status: "aktif", ruangan: rooms,
+            createdAt: stamp, updatedAt: stamp
+        });
+    } catch (error) {
+        throw new Error(
+            `Akun login dibuat (UID ${uid}) tapi profil gagal disimpan: ${error?.message || error}. ` +
+            "Daftarkan manual lewat tombol 'Daftarkan UID yang sudah ada'."
+        );
+    }
+    return { uid, email: cleanEmail };
 }
 
 function roomField() {
@@ -185,13 +215,7 @@ function openCreateForm() {
 
             if (data.password.length < 8) throw new Error("Password minimal 8 karakter.");
 
-            const created = await callFunction("createUserAccount", {
-                name: data.name,
-                email: data.email,
-                role: data.role,
-                password: data.password,
-                ruangan: data.ruangan || []
-            });
+            const created = await createAccount(data);
 
             await refresh();
             showCredentials({ title: "Akun berhasil dibuat", email: created.email, password: data.password });
@@ -226,6 +250,7 @@ function openEditForm(row) {
             let fallback = false;
 
             try {
+                if (!USE_FUNCTIONS) throw Object.assign(new Error("mode gratis"), { notDeployed: true, silent: true });
                 await callFunction("updateUserAccount", {
                     uid: row.id, name: data.name, email: data.email,
                     role: data.role, status: data.status, ruangan
@@ -239,7 +264,7 @@ function openEditForm(row) {
                     name: data.name, email: data.email, role: data.role,
                     status: data.status, ruangan, updatedAt: new Date().toISOString()
                 });
-                fallback = true;
+                fallback = !USE_FUNCTIONS ? false : true;
             }
 
             await refresh();
@@ -300,10 +325,20 @@ async function sendResetEmail(row) {
 async function deleteAccount(row) {
     if (!confirmDialog(
         `Hapus akun "${row.name || row.email}" (${row.email}) secara permanen?\n\n` +
-        "Akun login dan profilnya akan dihapus dan tidak bisa dikembalikan."
+        (USE_FUNCTIONS
+            ? "Akun login dan profilnya akan dihapus dan tidak bisa dikembalikan."
+            : "Profilnya dihapus sehingga tidak bisa masuk lagi (akun login di Firebase Authentication tidak ikut terhapus). Alternatif: set status Nonaktif lewat Edit.")
     )) return;
 
-    await callFunction("deleteUserAccount", { uid: row.id });
+    if (USE_FUNCTIONS) {
+        await callFunction("deleteUserAccount", { uid: row.id });
+    } else {
+        await remove(COLLECTION.USERS, row.id);
+        window.alert(
+            "Profil dihapus, jadi akun ini tidak bisa lagi masuk ke SARPRASIN. " +
+            "Akun login-nya masih ada di Firebase Authentication (hapus manual di Firebase Console bila perlu)."
+        );
+    }
     await refresh();
 }
 
@@ -397,5 +432,166 @@ function showCredentials({ title, email, password }) {
     copyBtn.addEventListener("click", async () => {
         const ok = await copyText(`Login SARPRASIN\nAlamat: ${loginUrl}\nEmail: ${email}\nPassword: ${password}`);
         copyBtn.textContent = ok ? "Tersalin ✓" : "Salin manual";
+    });
+}
+
+
+/* ======================================================
+   SPREADSHEET: ekspor daftar akun & impor massal
+====================================================== */
+
+function csvCell(v) {
+    const t = String(v ?? "");
+    return /[",\n;]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+}
+
+function downloadCsv(filename, header, rows) {
+    const lines = [header, ...rows].map((r) => r.map(csvCell).join(","));
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+function exportUsers() {
+    downloadCsv(
+        "daftar-akun-sarprasin.csv",
+        ["Nama", "Email", "Role", "Ruangan", "Status"],
+        state.users.map((u) => [
+            u.name, u.email, roleLabel(u.role),
+            ROOM_ROLES.includes(u.role) ? (u.ruangan || []).map((k) => state.rooms.find((r) => r.kodeRuang === k)?.namaRuang || k).join("; ") : "",
+            u.status === "nonaktif" ? "Nonaktif" : "Aktif"
+        ])
+    );
+}
+
+async function readRows(file) {
+    if (file.size > 2 * 1024 * 1024) throw new Error("File terlalu besar (maks. 2 MB).");
+    if (/\.csv$/i.test(file.name)) {
+        const { parseCsv } = await import("../shared/import-clean.js");
+        return parseCsv(await file.text());
+    }
+    if (!/\.xlsx$/i.test(file.name)) throw new Error("Format harus .xlsx atau .csv.");
+    const { default: readXlsxFile } = await import("read-excel-file");
+    return readXlsxFile(file);
+}
+
+function openImportModal() {
+
+    const overlay = document.createElement("div");
+    overlay.className = "modal-backdrop";
+    overlay.innerHTML = `
+        <div class="modal-box glass" role="dialog" aria-modal="true" style="max-width:920px;width:96%;">
+            <div class="modal-head">
+                <h3>Impor Akun dari Spreadsheet</h3>
+                <button type="button" class="modal-close" aria-label="Tutup">✕</button>
+            </div>
+            <p class="hint">Kolom: <b>Nama, Email, Role, Password</b> (boleh kosong = dibuat acak), <b>Ruangan</b> (boleh banyak, pisahkan dengan titik koma).
+               <a href="/contoh/contoh-akun.xlsx" download>Unduh file contoh</a>.
+               Hasil impor (termasuk password) bisa diunduh sekali setelah selesai; simpan di tempat aman dan bagikan langsung ke masing-masing orang.</p>
+            <input type="file" accept=".xlsx,.csv" data-file>
+            <p class="hint" data-msg></p>
+            <div class="table-wrap" style="max-height:340px;overflow:auto;" data-preview hidden>
+                <table class="table dashboard-table">
+                    <thead><tr><th>#</th><th>Nama</th><th>Email</th><th>Role</th><th>Ruangan</th><th>Status</th></tr></thead>
+                    <tbody data-body></tbody>
+                </table>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-ghost" data-dl hidden>⬇ Unduh hasil (CSV)</button>
+                <button type="button" class="btn-primary" data-go hidden>Buat akun</button>
+                <button type="button" class="btn-ghost" data-close>Tutup</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+
+    const q = (sel) => overlay.querySelector(sel);
+    const close = () => overlay.remove();
+    q(".modal-close").addEventListener("click", close);
+    q("[data-close]").addEventListener("click", close);
+
+    let parsed = [];
+    let results = [];
+
+    const roomLabel = (codes) => codes.map((k) => state.rooms.find((r) => r.kodeRuang === k)?.namaRuang || k).join("; ") || "-";
+
+    function paint() {
+        q("[data-body]").innerHTML = parsed.map((r, i) => {
+            const res = results[i];
+            const cls = res ? (res.ok ? "chip-on" : "chip-off") : (r.status === "error" ? "chip-off" : "chip-on");
+            const text = res ? (res.ok ? "Dibuat ✓" : res.error)
+                : [...r.problems, ...r.warns].join("; ") || "Siap";
+            return `<tr><td>${i + 1}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.email)}</td>
+                <td>${escapeHtml(roleLabel(r.role))}</td><td>${escapeHtml(roomLabel(r.ruangan))}</td>
+                <td><span class="chip ${cls}">${escapeHtml(text)}</span></td></tr>`;
+        }).join("");
+    }
+
+    q("[data-file]").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        results = [];
+        try {
+            const rows = await readRows(file);
+            parsed = parseAccounts(rows, {
+                rooms: state.rooms,
+                existingEmails: new Set(state.users.map((u) => String(u.email || "").toLowerCase()))
+            });
+            if (!parsed.length) throw new Error("Tidak ada baris akun.");
+            if (parsed.length > 100) throw new Error("Maksimal 100 akun per impor.");
+            const ok = parsed.filter((r) => r.status !== "error").length;
+            q("[data-msg]").textContent = `${parsed.length} baris: ${ok} siap dibuat, ${parsed.length - ok} bermasalah (dilewati).`;
+            q("[data-preview]").hidden = false;
+            q("[data-go]").hidden = ok === 0;
+            q("[data-go]").textContent = `Buat ${ok} akun`;
+            paint();
+        } catch (error) {
+            parsed = [];
+            q("[data-preview]").hidden = true;
+            q("[data-go]").hidden = true;
+            q("[data-msg]").textContent = error.message;
+        }
+    });
+
+    q("[data-go]").addEventListener("click", async () => {
+        const goBtn = q("[data-go]");
+        goBtn.disabled = true;
+        q("[data-file]").disabled = true;
+        results = [];
+
+        for (let i = 0; i < parsed.length; i++) {
+            const r = parsed[i];
+            if (r.status === "error") { results[i] = { ok: false, error: r.problems.join("; ") }; continue; }
+            q("[data-msg]").textContent = `Membuat akun ${i + 1} dari ${parsed.length}...`;
+            try {
+                await createAccount(r);
+                results[i] = { ok: true };
+            } catch (error) {
+                results[i] = { ok: false, error: error.message };
+            }
+            paint();
+            await new Promise((res) => setTimeout(res, 350));
+        }
+
+        const made = results.filter((x) => x?.ok).length;
+        q("[data-msg]").textContent = `Selesai: ${made} akun dibuat, ${parsed.length - made} gagal/dilewati. Unduh hasilnya sekarang, password tidak ditampilkan lagi.`;
+        goBtn.hidden = true;
+        q("[data-dl]").hidden = false;
+        await refresh();
+    });
+
+    q("[data-dl]").addEventListener("click", () => {
+        downloadCsv(
+            "hasil-impor-akun.csv",
+            ["Nama", "Email", "Role", "Password", "Ruangan", "Hasil"],
+            parsed.map((r, i) => [
+                r.name, r.email, roleLabel(r.role),
+                results[i]?.ok ? r.password : "",
+                roomLabel(r.ruangan),
+                results[i]?.ok ? "Dibuat" : (results[i]?.error || "Dilewati")
+            ])
+        );
     });
 }

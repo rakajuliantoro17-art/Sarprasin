@@ -24,6 +24,8 @@
                 <input type="search" id="searchInput" placeholder="Cari nama / email / role...">
                 <select id="roleFilter" aria-label="Filter role"></select>
                 <button type="button" class="btn-primary" id="addBtn">➕ Buat Akun Baru</button>
+                <button type="button" class="btn-ghost" id="importBtn">📥 Impor dari Spreadsheet</button>
+                <button type="button" class="btn-ghost" id="exportBtn">⬇ Ekspor daftar akun</button>
                 <button type="button" class="btn-ghost" id="linkBtn">Daftarkan UID yang sudah ada</button>
             </div>
             <div class="page-toolbar"><span id="rowCount"></span></div>
@@ -43,7 +45,7 @@
                 <li><strong>Waka Sarpras</strong> melihat semua data dan mengisi ringkasan untuk Portal Eksekutif</li>
                 <li><strong>Operator, Guru, Wali Kelas, Viewer</strong> hanya ruangan yang ditugaskan: tambah barang dasar, ubah kondisi, lapor kerusakan</li>
             </ul>
-            <p class="hint">Akun yang dinonaktifkan langsung tidak bisa masuk. Hapus akun bersifat permanen.</p>
+            <p class="hint">Akun yang dinonaktifkan langsung tidak bisa masuk. Pada mode gratis, ganti password lewat tombol Email reset; menghapus akun hanya menghapus profil (akun login tetap ada di Firebase Authentication).</p>
         </div>
     </div>
 

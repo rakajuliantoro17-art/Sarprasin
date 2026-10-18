@@ -66,3 +66,15 @@ Region ada di dua tempat dan harus sama: `functions/index.js` (`OPTIONS.region`)
 
 - `cd functions && npm test` menjalankan 14 uji logika (hak akses, validasi, perlindungan akun sendiri, rollback).
   Uji ini memakai Firebase tiruan, **bukan** emulator. Setelah deploy pertama, coba sekali dengan akun uji.
+
+## Mode gratis (paket Spark, tanpa Cloud Functions)
+
+Ini mode bawaan. Tidak perlu Blaze dan tidak perlu deploy functions.
+
+- Buat akun: dari halaman User Management atau **Impor dari Spreadsheet** (contoh: `/contoh/contoh-akun.xlsx`, maks. 100 baris per impor).
+- Ubah role/status/ruangan: langsung ke profil `users/{uid}`.
+- Lupa password: tombol **Email reset**. Ganti password orang lain secara langsung TIDAK tersedia.
+- Hapus: hanya menghapus profil (akun jadi tidak bisa masuk). Akun login tetap ada di Firebase Authentication.
+- Ekspor daftar akun: tombol **Ekspor daftar akun** (CSV, tanpa password).
+
+Untuk mengaktifkan fitur penuh (ganti password, hapus akun login) setelah memakai Blaze: deploy functions, lalu set env Vercel `VITE_USE_FUNCTIONS=true` dan redeploy.

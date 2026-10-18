@@ -31,13 +31,15 @@ import {
     ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject
 } from "./firebase.storage.js";
 
+import { callFunction } from "./firebase.functions.js";
+
 import {
     trackEvent,
     EVENTS,
     initializeAnalytics
 } from "./firebase.analytics.js";
 
-export { app, auth, db, storage, trackEvent, EVENTS, initializeAnalytics };
+export { app, auth, db, storage, trackEvent, EVENTS, initializeAnalytics, callFunction };
 
 
 // ======================================================

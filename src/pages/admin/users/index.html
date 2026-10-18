@@ -16,22 +16,34 @@
     <div id="pageContent" hidden>
         <div class="dashboard-title">
             <h2>User Management</h2>
-            <span>Profil, role, dan penugasan ruangan</span>
+            <span>Buat akun, atur role, dan penugasan ruangan</span>
         </div>
 
         <div class="dashboard-panel glass">
             <div class="page-toolbar">
                 <input type="search" id="searchInput" placeholder="Cari nama / email / role...">
-                <button type="button" class="btn-primary" id="addBtn">➕ Tambah Profil User</button>
+                <select id="roleFilter" aria-label="Filter role"></select>
+                <button type="button" class="btn-primary" id="addBtn">➕ Buat Akun Baru</button>
+                <button type="button" class="btn-ghost" id="linkBtn">Daftarkan UID yang sudah ada</button>
             </div>
             <div class="page-toolbar"><span id="rowCount"></span></div>
-            <p class="hint">Langkah: (1) buat akun di Firebase Console → Authentication → Add user, (2) salin UID-nya, (3) daftarkan di sini lengkap dengan role dan ruangannya.</p>
             <div class="table-wrap">
                 <table class="table dashboard-table">
                     <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Ruangan</th><th>Status</th><th>Aksi</th></tr></thead>
                     <tbody id="dataTable"><tr><td colspan="6" class="page-empty">Memuat data...</td></tr></tbody>
                 </table>
             </div>
+        </div>
+
+        <div class="dashboard-panel glass" style="margin-top:20px;">
+            <div class="dashboard-title"><h2 style="font-size:1.05rem;">Hak akses tiap role</h2></div>
+            <ul class="role-legend">
+                <li><strong>Administrator</strong> semua data, hapus data, kelola akun (hanya role ini yang bisa membuka halaman ini)</li>
+                <li><strong>Staff Sarpras, Arsiparis</strong> isi dan revisi aset, ruangan, bangunan, pengadaan</li>
+                <li><strong>Waka Sarpras</strong> melihat semua data dan mengisi ringkasan untuk Portal Eksekutif</li>
+                <li><strong>Operator, Guru, Wali Kelas, Viewer</strong> hanya ruangan yang ditugaskan: tambah barang dasar, ubah kondisi, lapor kerusakan</li>
+            </ul>
+            <p class="hint">Akun yang dinonaktifkan langsung tidak bisa masuk. Hapus akun bersifat permanen.</p>
         </div>
     </div>
 

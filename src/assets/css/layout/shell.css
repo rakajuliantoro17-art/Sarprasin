@@ -284,3 +284,62 @@ body.has-shell.sidebar-collapsed .dashboard-main { margin-left: 0; }
 }
 .check-item { display: flex; gap: 8px; align-items: center; font-size: .85rem; }
 .check-item input { width: auto; padding: 0; }
+
+/* ======================================================
+   User Management: chip status, kartu kredensial, legenda role
+====================================================== */
+
+.chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: .78rem;
+    border: 1px solid rgba(255, 255, 255, .25);
+}
+.chip-on  { background: rgba(16, 185, 129, .25); color: #a7f3d0; }
+.chip-off { background: rgba(239, 68, 68, .25);  color: #fecaca; }
+
+.cred-box { width: min(520px, 100%); }
+.cred-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 16px;
+    margin: 14px 0 0;
+}
+.cred-list dt { opacity: .7; }
+.cred-list dd { margin: 0; word-break: break-all; }
+.cred-list code {
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .15);
+    font-size: 1rem;
+    letter-spacing: .5px;
+}
+
+.role-legend { margin: 0; padding-left: 18px; line-height: 1.7; }
+
+.page-toolbar { flex-wrap: wrap; }
+
+/* ======================================================
+   Kontras teks pada permukaan yang selalu gelap
+   Heading/paragraf memakai --text-primary / --text-secondary yang
+   bernilai GELAP pada tema "light" (bawaan), padahal modal & sidebar
+   berlatar gelap. Di sini warnanya dipaksa mengikuti induk (putih).
+====================================================== */
+
+.modal-box h1, .modal-box h2, .modal-box h3, .modal-box h4, .modal-box p,
+.sidebar-brand h3, .profile-info h4 {
+    color: inherit;
+}
+
+.dashboard-panel .hint,
+.dashboard-panel .role-legend {
+    color: rgba(255, 255, 255, .85);
+}
+.role-legend strong { color: #fff; }
+
+/* Toolbar halaman: teks filter, jumlah baris, dan placeholder harus terbaca di atas panel gelap */
+.page-toolbar select { color: #fff; }
+.page-toolbar select option { color: #111; background: #fff; }
+.page-toolbar span { color: rgba(255, 255, 255, .85); }
+.page-toolbar input::placeholder { color: rgba(255, 255, 255, .6); }

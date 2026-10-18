@@ -53,9 +53,8 @@ authListener(async (user) => {
         const home = defaultPath(role);
         if (!home) return;
         const label = `Ke Portal ${roleLabel(role)}`;
-        document.querySelector("#fab span").textContent = label;
-        document.getElementById("fab").href = home;
         const btn = document.getElementById("authBtn");
+        if (!btn) return;
         btn.textContent = label;
         btn.href = home;
     } catch (error) {

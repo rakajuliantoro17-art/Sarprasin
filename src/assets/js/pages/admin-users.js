@@ -28,6 +28,7 @@ import { openFormModal, confirmDialog } from "../shared/form-modal.js";
 import { loadRooms } from "../shared/inventory-data.js";
 import { ROLE_LABEL, roleLabel } from "../../../config/portals.js";
 import { parseAccounts, randomPassword } from "../shared/account-import.js";
+import { callSheet, sheetsEnabled } from "../../../services/sheets/sheets.service.js";
 
 const USE_FUNCTIONS = import.meta.env.VITE_USE_FUNCTIONS === "true";
 
@@ -59,6 +60,8 @@ initAdminPage({
         document.getElementById("linkBtn").addEventListener("click", () => openLinkForm());
         document.getElementById("importBtn").addEventListener("click", () => openImportModal());
         document.getElementById("exportBtn").addEventListener("click", exportUsers);
+        document.getElementById("sheetPushBtn").addEventListener("click", pushToSheet);
+        document.getElementById("sheetPullBtn").addEventListener("click", pullFromSheet);
 
         document.getElementById("dataTable").addEventListener("click", onTableClick);
     }
@@ -467,6 +470,46 @@ function exportUsers() {
     );
 }
 
+function sheetGuard() {
+    if (sheetsEnabled()) return true;
+    window.alert("Sinkron Spreadsheet belum diaktifkan. Isi VITE_SHEETS_URL di Vercel (lihat docs/sinkron-spreadsheet.md), lalu redeploy.");
+    return false;
+}
+
+async function pushToSheet(e) {
+    if (!sheetGuard()) return;
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try {
+        const rows = [["Nama", "Email", "Role", "Ruangan", "Status"],
+            ...state.users.map((u) => [
+                u.name, u.email, roleLabel(u.role),
+                ROOM_ROLES.includes(u.role) ? (u.ruangan || []).map((k) => state.rooms.find((r) => r.kodeRuang === k)?.namaRuang || k).join("; ") : "",
+                u.status === "nonaktif" ? "Nonaktif" : "Aktif"
+            ])];
+        const res = await callSheet("export", { rows });
+        window.alert(`${res.baris} akun ditulis ke sheet "Daftar Akun".`);
+    } catch (error) {
+        window.alert(error.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function pullFromSheet(e) {
+    if (!sheetGuard()) return;
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try {
+        const res = await callSheet("pull");
+        openImportModal({ rows: res.rows, fromSheet: true });
+    } catch (error) {
+        window.alert(error.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
 async function readRows(file) {
     if (file.size > 2 * 1024 * 1024) throw new Error("File terlalu besar (maks. 2 MB).");
     if (/\.csv$/i.test(file.name)) {
@@ -478,7 +521,7 @@ async function readRows(file) {
     return readXlsxFile(file);
 }
 
-function openImportModal() {
+function openImportModal(opts = {}) {
 
     const overlay = document.createElement("div");
     overlay.className = "modal-backdrop";
@@ -529,12 +572,10 @@ function openImportModal() {
         }).join("");
     }
 
-    q("[data-file]").addEventListener("change", async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    async function ingest(getRows) {
         results = [];
         try {
-            const rows = await readRows(file);
+            const rows = await getRows();
             parsed = parseAccounts(rows, {
                 rooms: state.rooms,
                 existingEmails: new Set(state.users.map((u) => String(u.email || "").toLowerCase()))
@@ -553,7 +594,17 @@ function openImportModal() {
             q("[data-go]").hidden = true;
             q("[data-msg]").textContent = error.message;
         }
+    }
+
+    q("[data-file]").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) ingest(() => readRows(file));
     });
+
+    if (opts.rows) {
+        q("[data-file]").hidden = true;
+        ingest(async () => opts.rows);
+    }
 
     q("[data-go]").addEventListener("click", async () => {
         const goBtn = q("[data-go]");
@@ -580,6 +631,21 @@ function openImportModal() {
         goBtn.hidden = true;
         q("[data-dl]").hidden = false;
         await refresh();
+
+        if (opts.fromSheet) {
+            try {
+                await callSheet("done", {
+                    items: parsed.map((r, i) => ({
+                        name: r.name, email: r.email, role: roleLabel(r.role),
+                        ruangan: roomLabel(r.ruangan),
+                        ok: Boolean(results[i]?.ok), error: results[i]?.error || ""
+                    }))
+                });
+                q("[data-msg]").textContent += " Baris yang berhasil sudah dihapus dari sheet 'Akun' dan dicatat di 'Riwayat Impor'.";
+            } catch (error) {
+                q("[data-msg]").textContent += ` (Gagal memperbarui sheet: ${error.message})`;
+            }
+        }
     });
 
     q("[data-dl]").addEventListener("click", () => {
